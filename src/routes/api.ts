@@ -63,12 +63,39 @@ api.get('/admin/casinos', async (c) => {
   const { env } = c;
   
   try {
+    // Get all casinos with their details
     const casinos = await env.DB.prepare(
       'SELECT * FROM casinos ORDER BY sort_order, name'
     ).all();
     
+    // For each casino, get its details in all languages
+    for (const casino of casinos.results) {
+      const details = await env.DB.prepare(
+        'SELECT * FROM casino_details WHERE casino_id = ?'
+      ).bind(casino.id).all();
+      
+      // Merge details into the casino object
+      for (const detail of details.results) {
+        const lang = detail.language;
+        casino[`welcome_bonus_${lang}`] = detail.welcome_bonus;
+        casino[`min_deposit_${lang}`] = detail.min_deposit;
+        casino[`payment_methods_${lang}`] = detail.payment_methods;
+        casino[`license_${lang}`] = detail.license;
+        casino[`founded_year_${lang}`] = detail.founded_year;
+        casino[`bonus_description_${lang}`] = detail.bonus_description;
+        casino[`games_description_${lang}`] = detail.games_description;
+        casino[`payment_description_${lang}`] = detail.payment_description;
+        casino[`support_description_${lang}`] = detail.support_description;
+        casino[`mobile_description_${lang}`] = detail.mobile_description;
+        casino[`security_description_${lang}`] = detail.security_description;
+        casino[`responsible_gaming_${lang}`] = detail.responsible_gaming_description;
+        casino[`pros_${lang}`] = detail.pros;
+      }
+    }
+    
     return c.json(casinos.results);
   } catch (error) {
+    console.error('Failed to fetch casinos:', error);
     return c.json({ error: 'Failed to fetch casinos' }, 500);
   }
 });
@@ -78,12 +105,43 @@ api.post('/admin/casinos', async (c) => {
   const data = await c.req.json();
   
   try {
+    // Insert main casino record
     const result = await env.DB.prepare(
-      'INSERT INTO casinos (slug, name, logo_url, website_url, affiliate_link, sort_order) VALUES (?, ?, ?, ?, ?, ?)'
-    ).bind(data.slug, data.name, data.logo_url, data.website_url, data.affiliate_link, data.sort_order || 0).run();
+      'INSERT INTO casinos (slug, name, logo_url, website_url, affiliate_link, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    ).bind(data.slug, data.name, data.logo_url, data.website_url, data.affiliate_link, data.sort_order || 0, data.is_active ? 1 : 0).run();
     
-    return c.json({ id: result.meta.last_row_id, ...data });
+    const casinoId = result.meta.last_row_id;
+    
+    // Insert details for each language
+    const languages = ['en', 'pt', 'zh'];
+    for (const lang of languages) {
+      await env.DB.prepare(`
+        INSERT INTO casino_details 
+        (casino_id, language, welcome_bonus, min_deposit, payment_methods, license, founded_year,
+         bonus_description, games_description, payment_description, support_description, 
+         mobile_description, security_description, responsible_gaming_description, pros)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        casinoId, lang,
+        data[`welcome_bonus_${lang}`] || '',
+        data[`min_deposit_${lang}`] || '',
+        data[`payment_methods_${lang}`] || '',
+        data[`license_${lang}`] || '',
+        data[`founded_year_${lang}`] || '',
+        data[`bonus_description_${lang}`] || '',
+        data[`games_description_${lang}`] || '',
+        data[`payment_description_${lang}`] || '',
+        data[`support_description_${lang}`] || '',
+        data[`mobile_description_${lang}`] || '',
+        data[`security_description_${lang}`] || '',
+        data[`responsible_gaming_${lang}`] || '',
+        data[`pros_${lang}`] || ''
+      ).run();
+    }
+    
+    return c.json({ id: casinoId, ...data });
   } catch (error) {
+    console.error('Failed to create casino:', error);
     return c.json({ error: 'Failed to create casino' }, 500);
   }
 });
@@ -94,13 +152,95 @@ api.put('/admin/casinos/:id', async (c) => {
   const data = await c.req.json();
   
   try {
+    // Update main casino record
     await env.DB.prepare(
-      'UPDATE casinos SET name = ?, logo_url = ?, website_url = ?, affiliate_link = ?, sort_order = ?, is_active = ? WHERE id = ?'
-    ).bind(data.name, data.logo_url, data.website_url, data.affiliate_link, data.sort_order, data.is_active, id).run();
+      'UPDATE casinos SET name = ?, slug = ?, logo_url = ?, website_url = ?, affiliate_link = ?, sort_order = ?, is_active = ? WHERE id = ?'
+    ).bind(data.name, data.slug, data.logo_url, data.website_url, data.affiliate_link, data.sort_order, data.is_active ? 1 : 0, id).run();
+    
+    // Update or insert details for each language
+    const languages = ['en', 'pt', 'zh'];
+    for (const lang of languages) {
+      // Check if details exist for this language
+      const existing = await env.DB.prepare(
+        'SELECT id FROM casino_details WHERE casino_id = ? AND language = ?'
+      ).bind(id, lang).first();
+      
+      if (existing) {
+        // Update existing details
+        await env.DB.prepare(`
+          UPDATE casino_details SET
+            welcome_bonus = ?, min_deposit = ?, payment_methods = ?, license = ?, founded_year = ?,
+            bonus_description = ?, games_description = ?, payment_description = ?, support_description = ?,
+            mobile_description = ?, security_description = ?, responsible_gaming_description = ?, pros = ?
+          WHERE casino_id = ? AND language = ?
+        `).bind(
+          data[`welcome_bonus_${lang}`] || '',
+          data[`min_deposit_${lang}`] || '',
+          data[`payment_methods_${lang}`] || '',
+          data[`license_${lang}`] || '',
+          data[`founded_year_${lang}`] || '',
+          data[`bonus_description_${lang}`] || '',
+          data[`games_description_${lang}`] || '',
+          data[`payment_description_${lang}`] || '',
+          data[`support_description_${lang}`] || '',
+          data[`mobile_description_${lang}`] || '',
+          data[`security_description_${lang}`] || '',
+          data[`responsible_gaming_${lang}`] || '',
+          data[`pros_${lang}`] || '',
+          id, lang
+        ).run();
+      } else {
+        // Insert new details
+        await env.DB.prepare(`
+          INSERT INTO casino_details 
+          (casino_id, language, welcome_bonus, min_deposit, payment_methods, license, founded_year,
+           bonus_description, games_description, payment_description, support_description, 
+           mobile_description, security_description, responsible_gaming_description, pros)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(
+          id, lang,
+          data[`welcome_bonus_${lang}`] || '',
+          data[`min_deposit_${lang}`] || '',
+          data[`payment_methods_${lang}`] || '',
+          data[`license_${lang}`] || '',
+          data[`founded_year_${lang}`] || '',
+          data[`bonus_description_${lang}`] || '',
+          data[`games_description_${lang}`] || '',
+          data[`payment_description_${lang}`] || '',
+          data[`support_description_${lang}`] || '',
+          data[`mobile_description_${lang}`] || '',
+          data[`security_description_${lang}`] || '',
+          data[`responsible_gaming_${lang}`] || '',
+          data[`pros_${lang}`] || ''
+        ).run();
+      }
+    }
     
     return c.json({ id, ...data });
   } catch (error) {
+    console.error('Failed to update casino:', error);
     return c.json({ error: 'Failed to update casino' }, 500);
+  }
+});
+
+api.delete('/admin/casinos/:id', async (c) => {
+  const { env } = c;
+  const id = c.req.param('id');
+  
+  try {
+    // Delete casino details first (foreign key constraint)
+    await env.DB.prepare('DELETE FROM casino_details WHERE casino_id = ?').bind(id).run();
+    
+    // Delete player type associations
+    await env.DB.prepare('DELETE FROM player_type_casinos WHERE casino_id = ?').bind(id).run();
+    
+    // Delete main casino record
+    await env.DB.prepare('DELETE FROM casinos WHERE id = ?').bind(id).run();
+    
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Failed to delete casino:', error);
+    return c.json({ error: 'Failed to delete casino' }, 500);
   }
 });
 
