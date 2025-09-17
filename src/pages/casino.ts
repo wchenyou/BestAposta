@@ -1,6 +1,6 @@
 import { Context } from 'hono';
 import { Bindings } from '../types';
-import { t } from '../utils/language';
+import { translations as t } from '../utils/language';
 
 export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug: string, lang: 'en' | 'pt' | 'zh') {
   const { env } = c;
@@ -282,6 +282,17 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
               </div>
             </div>
           `}
+          
+          <!-- Bottom CTA Button -->
+          <div class="mt-12 text-center">
+            <a href="${casino.affiliate_link || casino.website_url}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="inline-block bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition">
+              <i class="fas fa-play-circle mr-2"></i>
+              ${lang === 'zh' ? '立即遊戲' : lang === 'pt' ? 'Jogar Agora' : 'Play Now'}
+            </a>
+          </div>
         </div>
         
         <!-- Language Selector Script -->

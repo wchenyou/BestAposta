@@ -67,13 +67,13 @@ app.get('/casinos', async (c) => {
       SELECT 
         c.*,
         json_object(
-          'welcome_bonus', cd.welcome_bonus,
-          'min_deposit', cd.min_deposit,
-          'payment_methods', cd.payment_methods,
-          'rating_overall', cd.rating_overall
+          'welcome_bonus', ci.welcome_bonus,
+          'min_deposit', ci.min_deposit,
+          'payment_methods', ci.payment_methods,
+          'rating_overall', ci.rating_overall
         ) as details
       FROM casinos c
-      LEFT JOIN casino_details cd ON c.id = cd.casino_id AND cd.language = ?
+      LEFT JOIN casino_info ci ON c.id = ci.casino_id AND ci.language = ?
       WHERE c.is_active = 1
       ORDER BY c.sort_order, c.name
     `).bind(lang).all();
@@ -94,23 +94,10 @@ app.get('/casinos', async (c) => {
 // Casino detail page
 app.get('/casino/:slug', async (c) => {
   const lang = detectLanguage(c);
-  const { env } = c;
   const slug = c.req.param('slug');
   
   try {
-    // Get casino with details
-    const casino = await env.DB.prepare(`
-      SELECT c.*, cd.*
-      FROM casinos c
-      LEFT JOIN casino_details cd ON c.id = cd.casino_id AND cd.language = ?
-      WHERE c.slug = ? AND c.is_active = 1
-    `).bind(lang, slug).first();
-    
-    if (!casino) {
-      return c.html('<h1>Casino not found</h1>', 404);
-    }
-    
-    return c.html(renderCasinoPage(lang, casino));
+    return await renderCasinoPage(c, slug, lang);
   } catch (error) {
     console.error('Error loading casino page:', error);
     return c.html('<h1>Error loading casino</h1>', 500);

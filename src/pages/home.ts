@@ -8,12 +8,12 @@ export function renderHomePage(lang: Language, playerTypes: any[]): string {
         <div class="container mx-auto px-4">
             <div class="text-center">
                 <h1 class="text-4xl md:text-5xl font-bold mb-4">
-                    ${t(lang, 'siteName')}
+                    ${t(lang, 'tagline')}
                 </h1>
-                <p class="text-xl mb-8">${t(lang, 'tagline')}</p>
+                <p class="text-lg mb-8 max-w-3xl mx-auto">${t(lang, 'subtitle')}</p>
                 <div class="flex justify-center space-x-4">
-                    <a href="#player-types" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                        <i class="fas fa-search mr-2"></i> ${t(lang, 'playerTypes.title')}
+                    <a href="#player-types" class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition text-lg">
+                        <i class="fas fa-search mr-2"></i> ${lang === 'pt' ? 'Encontre Seu Cassino Ideal' : lang === 'zh' ? '找到您的理想賭場' : 'Find Your Ideal Casino'}
                     </a>
                     <a href="/blog" class="bg-purple-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
                         <i class="fas fa-book-open mr-2"></i> ${t(lang, 'nav.blog')}

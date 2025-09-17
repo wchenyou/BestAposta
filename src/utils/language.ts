@@ -4,8 +4,9 @@ export type Language = 'en' | 'pt' | 'zh';
 
 export const translations = {
   en: {
-    siteName: 'Best Apostas',
-    tagline: 'Your Guide to Online Casinos in Brazil',
+    siteName: 'Your Best Casino',
+    tagline: 'The Best Online Casino Reviews',
+    subtitle: 'Find the perfect casino for your playing style. We compare bonuses, games, and security for you.',
     nav: {
       home: 'Home',
       casinos: 'Casinos',
@@ -61,8 +62,9 @@ export const translations = {
     }
   },
   pt: {
-    siteName: 'Best Apostas',
-    tagline: 'Seu Guia para Cassinos Online no Brasil',
+    siteName: 'Seu Melhor Cassino',
+    tagline: 'As Melhores Análises de Cassinos Online',
+    subtitle: 'Encontre o cassino perfeito para seu estilo de jogo. Comparamos bônus, jogos e segurança para você.',
     nav: {
       home: 'Início',
       casinos: 'Cassinos',
@@ -118,8 +120,9 @@ export const translations = {
     }
   },
   zh: {
-    siteName: 'Best Apostas',
-    tagline: '巴西在线娱乐城指南',
+    siteName: '您的最佳賭場',
+    tagline: '最佳線上賭場評論',
+    subtitle: '找到適合您遊戲風格的完美賭場。我們為您比較獎金、遊戲和安全性。',
     nav: {
       home: '首页',
       casinos: '娱乐城',

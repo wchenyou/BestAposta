@@ -328,14 +328,56 @@ export function renderAdminPage(): string {
                                     
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Logo URL</label>
-                                            <input type="url" class="w-full px-3 py-2 border rounded"
-                                                placeholder="https://example.com/logo.png"
-                                                value=\${formData.logo_url}
-                                                onChange=\${e => setFormData({...formData, logo_url: e.target.value})} />
-                                            \${formData.logo_url ? html\`
-                                                <img src="\${formData.logo_url}" class="mt-2 h-12 object-contain" alt="Logo preview" />
-                                            \` : ''}
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Casino Logo</label>
+                                            <div class="space-y-2">
+                                                <div class="flex items-center space-x-2">
+                                                    <input type="url" class="flex-1 px-3 py-2 border rounded"
+                                                        placeholder="https://example.com/logo.png"
+                                                        value=\${formData.logo_url}
+                                                        onChange=\${e => setFormData({...formData, logo_url: e.target.value})} />
+                                                    <label class="px-3 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 cursor-pointer">
+                                                        <i class="fas fa-upload mr-1"></i> Upload
+                                                        <input type="file" 
+                                                            accept="image/*"
+                                                            class="hidden"
+                                                            onChange=\${async (e) => {
+                                                                const file = e.target.files[0];
+                                                                if (file) {
+                                                                    // Convert to base64 for preview
+                                                                    const reader = new FileReader();
+                                                                    reader.onload = (e) => {
+                                                                        // For now, we'll use the base64 data URL
+                                                                        // In production, you'd upload to a CDN/storage service
+                                                                        setFormData({...formData, logo_url: e.target.result});
+                                                                    };
+                                                                    reader.readAsDataURL(file);
+                                                                    
+                                                                    // Show file info
+                                                                    alert('File selected: ' + file.name + '\\nSize: ' + (file.size / 1024).toFixed(2) + ' KB\\n\\nNote: In production, this would upload to a CDN.');
+                                                                }
+                                                            }} />
+                                                    </label>
+                                                </div>
+                                                \${formData.logo_url ? html\`
+                                                    <div class="flex items-center space-x-3 p-2 border rounded bg-gray-50">
+                                                        <img src="\${formData.logo_url}" class="h-12 w-12 object-contain" alt="Logo preview" />
+                                                        <div class="flex-1">
+                                                            <p class="text-xs text-gray-600">Logo Preview</p>
+                                                            <p class="text-xs text-gray-500 truncate">\${formData.logo_url.substring(0, 50)}...</p>
+                                                        </div>
+                                                        <button type="button"
+                                                            onClick=\${() => setFormData({...formData, logo_url: ''})}
+                                                            class="text-red-500 hover:text-red-700">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                \` : html\`
+                                                    <p class="text-xs text-gray-500">
+                                                        <i class="fas fa-info-circle mr-1"></i>
+                                                        Enter URL or upload an image file (PNG, JPG, SVG)
+                                                    </p>
+                                                \`}
+                                            </div>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Website URL</label>
@@ -734,13 +776,16 @@ export function renderAdminPage(): string {
                         });
                         
                         if (res.ok) {
+                            const savedData = await res.json();
                             await loadPlayerTypes();
                             setShowForm(false);
                             setEditingType(null);
+                            return savedData; // Return the saved player type data
                         }
                     } catch (err) {
                         console.error('Failed to save player type:', err);
                     }
+                    return null;
                 }
                 
                 async function deletePlayerType(id) {
@@ -846,14 +891,70 @@ export function renderAdminPage(): string {
                     is_active: true
                 });
                 
+                const [allCasinos, setAllCasinos] = useState([]);
+                const [selectedCasinos, setSelectedCasinos] = useState([]);
+                const [loadingCasinos, setLoadingCasinos] = useState(true);
+                
                 const iconOptions = [
                     'fa-user', 'fa-user-plus', 'fa-dice', 'fa-fire', 'fa-calculator', 'fa-crown',
                     'fa-star', 'fa-trophy', 'fa-gem', 'fa-coins', 'fa-wallet', 'fa-chart-line'
                 ];
                 
-                const handleSubmit = (e) => {
+                useEffect(() => {
+                    loadCasinos();
+                }, []);
+                
+                async function loadCasinos() {
+                    setLoadingCasinos(true);
+                    try {
+                        // Load all available casinos
+                        const casinosRes = await apiCall('/admin/casinos');
+                        if (casinosRes.ok) {
+                            const casinos = await casinosRes.json();
+                            setAllCasinos(casinos);
+                        }
+                        
+                        // If editing, load the selected casinos for this player type
+                        if (playerType && playerType.id) {
+                            const selectedRes = await apiCall('/admin/player-types/' + playerType.id + '/casinos');
+                            if (selectedRes.ok) {
+                                const selected = await selectedRes.json();
+                                setSelectedCasinos(selected.map(c => c.id));
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Failed to load casinos:', err);
+                    }
+                    setLoadingCasinos(false);
+                }
+                
+                const handleCasinoToggle = (casinoId) => {
+                    setSelectedCasinos(prev => {
+                        if (prev.includes(casinoId)) {
+                            return prev.filter(id => id !== casinoId);
+                        } else {
+                            return [...prev, casinoId];
+                        }
+                    });
+                };
+                
+                const handleSubmit = async (e) => {
                     e.preventDefault();
-                    onSave(formData);
+                    
+                    // First save the player type
+                    const savedPlayerType = await onSave(formData);
+                    
+                    // If we have an ID (either from edit or from save response), update the casino associations
+                    if (savedPlayerType && savedPlayerType.id) {
+                        try {
+                            await apiCall('/admin/player-types/' + savedPlayerType.id + '/casinos', {
+                                method: 'POST',
+                                body: JSON.stringify({ casinoIds: selectedCasinos })
+                            });
+                        } catch (err) {
+                            console.error('Failed to update casino associations:', err);
+                        }
+                    }
                 };
                 
                 return html\`
@@ -931,6 +1032,31 @@ export function renderAdminPage(): string {
                                                 onChange=\${e => setFormData({...formData, is_active: e.target.checked})} />
                                             <label for="player_active">Active</label>
                                         </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Associated Casinos</label>
+                                    <div class="border rounded p-3 bg-gray-50 max-h-64 overflow-y-auto">
+                                        \${loadingCasinos ? html\`
+                                            <div class="text-gray-500 text-sm">Loading casinos...</div>
+                                        \` : html\`
+                                            <div class="space-y-2">
+                                                \${allCasinos.length === 0 ? html\`
+                                                    <div class="text-gray-500 text-sm">No casinos available</div>
+                                                \` : allCasinos.map(casino => html\`
+                                                    <label class="flex items-center">
+                                                        <input type="checkbox" class="mr-2"
+                                                            checked=\${selectedCasinos.includes(casino.id)}
+                                                            onChange=\${() => handleCasinoToggle(casino.id)} />
+                                                        <span class="text-sm">\${casino.name}</span>
+                                                    </label>
+                                                \`)}
+                                            </div>
+                                        \`}
+                                    </div>
+                                    <div class="mt-1 text-xs text-gray-500">
+                                        \${selectedCasinos.length} casino(s) selected
                                     </div>
                                 </div>
                             </div>
@@ -1063,6 +1189,7 @@ export function renderAdminPage(): string {
                                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
                                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
                                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Author</th>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Publish Date</th>
                                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                                             </tr>
@@ -1080,6 +1207,9 @@ export function renderAdminPage(): string {
                                                         \${categories.find(c => c.id === post.category_id)?.name_en || '-'}
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">\${post.author || '-'}</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        \${post.published_at ? new Date(post.published_at).toLocaleDateString() : '-'}
+                                                    </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                                             \${post.is_published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
@@ -1109,6 +1239,219 @@ export function renderAdminPage(): string {
                 \`;
             }
             
+            function BlogCategoriesManager({ categories, onUpdate }) {
+                const [editingCategory, setEditingCategory] = useState(null);
+                const [showForm, setShowForm] = useState(false);
+                
+                async function saveCategory(category) {
+                    try {
+                        const url = category.id ? '/admin/blog/categories/' + category.id : '/admin/blog/categories';
+                        const method = category.id ? 'PUT' : 'POST';
+                        
+                        const res = await apiCall(url, {
+                            method,
+                            body: JSON.stringify(category)
+                        });
+                        
+                        if (res.ok) {
+                            await onUpdate();
+                            setShowForm(false);
+                            setEditingCategory(null);
+                        }
+                    } catch (err) {
+                        console.error('Failed to save category:', err);
+                    }
+                }
+                
+                async function deleteCategory(id) {
+                    if (confirm('Are you sure you want to delete this category?')) {
+                        try {
+                            const res = await apiCall('/admin/blog/categories/' + id, { method: 'DELETE' });
+                            if (res.ok) {
+                                await onUpdate();
+                            }
+                        } catch (err) {
+                            console.error('Failed to delete category:', err);
+                        }
+                    }
+                }
+                
+                if (showForm) {
+                    return html\`
+                        <div>
+                            <button onClick=\${() => { setShowForm(false); setEditingCategory(null); }}
+                                class="mb-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+                                <i class="fas fa-arrow-left mr-2"></i> Back
+                            </button>
+                            <\${BlogCategoryForm} 
+                                category=\${editingCategory}
+                                onSave=\${saveCategory}
+                                onCancel=\${() => { setShowForm(false); setEditingCategory(null); }}
+                            />
+                        </div>
+                    \`;
+                }
+                
+                return html\`
+                    <div>
+                        <button onClick=\${() => setShowForm(true)}
+                            class="mb-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                            <i class="fas fa-plus mr-2"></i> Add Category
+                        </button>
+                        
+                        <div class="bg-white rounded-lg shadow overflow-hidden">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sort Order</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    \${categories.map(category => html\`
+                                        <tr>
+                                            <td class="px-6 py-4">
+                                                <div class="text-sm">
+                                                    <div class="font-medium text-gray-900">\${category.name_en}</div>
+                                                    <div class="text-gray-500 text-xs">PT: \${category.name_pt || '-'}</div>
+                                                    <div class="text-gray-500 text-xs">ZH: \${category.name_zh || '-'}</div>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">\${category.slug}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">\${category.sort_order || 0}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                    \${category.is_visible ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">
+                                                    \${category.is_visible ? 'Visible' : 'Hidden'}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                <button onClick=\${() => { setEditingCategory(category); setShowForm(true); }}
+                                                    class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button onClick=\${() => deleteCategory(category.id)}
+                                                    class="text-red-600 hover:text-red-900">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    \`)}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                \`;
+            }
+            
+            function BlogCategoryForm({ category, onSave, onCancel }) {
+                const [formData, setFormData] = useState(category || {
+                    slug: '',
+                    name_en: '',
+                    name_pt: '',
+                    name_zh: '',
+                    description_en: '',
+                    description_pt: '',
+                    description_zh: '',
+                    is_visible: true,
+                    sort_order: 0
+                });
+                
+                const handleSubmit = (e) => {
+                    e.preventDefault();
+                    onSave(formData);
+                };
+                
+                return html\`
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-bold mb-4">\${category ? 'Edit Category' : 'Add New Category'}</h3>
+                        <form onSubmit=\${handleSubmit}>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Slug *</label>
+                                        <input type="text" class="w-full px-3 py-2 border rounded" required
+                                            value=\${formData.slug}
+                                            onChange=\${e => setFormData({...formData, slug: e.target.value})} />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Sort Order</label>
+                                        <input type="number" class="w-full px-3 py-2 border rounded"
+                                            value=\${formData.sort_order}
+                                            onChange=\${e => setFormData({...formData, sort_order: parseInt(e.target.value) || 0})} />
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Name (English) *</label>
+                                    <input type="text" class="w-full px-3 py-2 border rounded" required
+                                        value=\${formData.name_en}
+                                        onChange=\${e => setFormData({...formData, name_en: e.target.value})} />
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Name (Portuguese) *</label>
+                                    <input type="text" class="w-full px-3 py-2 border rounded" required
+                                        value=\${formData.name_pt}
+                                        onChange=\${e => setFormData({...formData, name_pt: e.target.value})} />
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Name (Chinese)</label>
+                                    <input type="text" class="w-full px-3 py-2 border rounded"
+                                        value=\${formData.name_zh}
+                                        onChange=\${e => setFormData({...formData, name_zh: e.target.value})} />
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description (English)</label>
+                                    <textarea class="w-full px-3 py-2 border rounded" rows="2"
+                                        value=\${formData.description_en}
+                                        onChange=\${e => setFormData({...formData, description_en: e.target.value})}></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description (Portuguese)</label>
+                                    <textarea class="w-full px-3 py-2 border rounded" rows="2"
+                                        value=\${formData.description_pt}
+                                        onChange=\${e => setFormData({...formData, description_pt: e.target.value})}></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description (Chinese)</label>
+                                    <textarea class="w-full px-3 py-2 border rounded" rows="2"
+                                        value=\${formData.description_zh}
+                                        onChange=\${e => setFormData({...formData, description_zh: e.target.value})}></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2"
+                                            checked=\${formData.is_visible}
+                                            onChange=\${e => setFormData({...formData, is_visible: e.target.checked})} />
+                                        <span class="text-sm font-medium text-gray-700">Visible</span>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex space-x-3">
+                                    <button type="submit" 
+                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                        <i class="fas fa-save mr-2"></i> Save
+                                    </button>
+                                    <button type="button" onClick=\${onCancel}
+                                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                \`;
+            }
+            
             function BlogPostForm({ post, categories, onSave, onCancel }) {
                 const [formData, setFormData] = useState(post || {
                     category_id: categories[0]?.id || 1,
@@ -1128,17 +1471,26 @@ export function renderAdminPage(): string {
                     published_at: new Date().toISOString().split('T')[0]
                 });
                 
+                const [activeLanguageTab, setActiveLanguageTab] = useState('en');
+                
                 const handleSubmit = (e) => {
                     e.preventDefault();
                     onSave(formData);
                 };
+                
+                const languageTabs = [
+                    { code: 'en', label: 'English', flag: '🇺🇸' },
+                    { code: 'pt', label: 'Português', flag: '🇧🇷' },
+                    { code: 'zh', label: '中文', flag: '🇨🇳' }
+                ];
                 
                 return html\`
                     <div class="bg-white rounded-lg shadow p-6">
                         <h3 class="text-lg font-bold mb-4">\${post ? 'Edit Post' : 'Add New Post'}</h3>
                         <form onSubmit=\${handleSubmit}>
                             <div class="space-y-4">
-                                <div class="grid grid-cols-2 gap-4">
+                                <!-- Basic Info -->
+                                <div class="grid grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Category *</label>
                                         <select class="w-full px-3 py-2 border rounded" required
@@ -1152,84 +1504,24 @@ export function renderAdminPage(): string {
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Slug *</label>
                                         <input type="text" class="w-full px-3 py-2 border rounded" required
+                                            placeholder="url-friendly-slug"
                                             value=\${formData.slug}
                                             onChange=\${e => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/ /g, '-')})} />
                                     </div>
-                                </div>
-                                
-                                <div class="grid grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Title (English) *</label>
-                                        <input type="text" class="w-full px-3 py-2 border rounded" required
-                                            value=\${formData.title_en}
-                                            onChange=\${e => setFormData({...formData, title_en: e.target.value})} />
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Title (Portuguese) *</label>
-                                        <input type="text" class="w-full px-3 py-2 border rounded" required
-                                            value=\${formData.title_pt}
-                                            onChange=\${e => setFormData({...formData, title_pt: e.target.value})} />
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Title (Chinese)</label>
-                                        <input type="text" class="w-full px-3 py-2 border rounded"
-                                            value=\${formData.title_zh}
-                                            onChange=\${e => setFormData({...formData, title_zh: e.target.value})} />
-                                    </div>
-                                </div>
-                                
-                                <div class="grid grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Excerpt (English)</label>
-                                        <textarea class="w-full px-3 py-2 border rounded" rows="2"
-                                            value=\${formData.excerpt_en}
-                                            onChange=\${e => setFormData({...formData, excerpt_en: e.target.value})}></textarea>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Excerpt (Portuguese)</label>
-                                        <textarea class="w-full px-3 py-2 border rounded" rows="2"
-                                            value=\${formData.excerpt_pt}
-                                            onChange=\${e => setFormData({...formData, excerpt_pt: e.target.value})}></textarea>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Excerpt (Chinese)</label>
-                                        <textarea class="w-full px-3 py-2 border rounded" rows="2"
-                                            value=\${formData.excerpt_zh}
-                                            onChange=\${e => setFormData({...formData, excerpt_zh: e.target.value})}></textarea>
-                                    </div>
-                                </div>
-                                
-                                <div class="grid grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Content (English)</label>
-                                        <textarea class="w-full px-3 py-2 border rounded" rows="6"
-                                            value=\${formData.content_en}
-                                            onChange=\${e => setFormData({...formData, content_en: e.target.value})}></textarea>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Content (Portuguese)</label>
-                                        <textarea class="w-full px-3 py-2 border rounded" rows="6"
-                                            value=\${formData.content_pt}
-                                            onChange=\${e => setFormData({...formData, content_pt: e.target.value})}></textarea>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Content (Chinese)</label>
-                                        <textarea class="w-full px-3 py-2 border rounded" rows="6"
-                                            value=\${formData.content_zh}
-                                            onChange=\${e => setFormData({...formData, content_zh: e.target.value})}></textarea>
-                                    </div>
-                                </div>
-                                
-                                <div class="grid grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Featured Image URL</label>
                                         <input type="text" class="w-full px-3 py-2 border rounded"
+                                            placeholder="https://example.com/image.jpg"
                                             value=\${formData.featured_image}
                                             onChange=\${e => setFormData({...formData, featured_image: e.target.value})} />
                                     </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Author</label>
                                         <input type="text" class="w-full px-3 py-2 border rounded"
+                                            placeholder="John Doe"
                                             value=\${formData.author}
                                             onChange=\${e => setFormData({...formData, author: e.target.value})} />
                                     </div>
@@ -1239,23 +1531,103 @@ export function renderAdminPage(): string {
                                             value=\${formData.published_at?.split('T')[0]}
                                             onChange=\${e => setFormData({...formData, published_at: e.target.value})} />
                                     </div>
+                                    <div class="flex items-center pt-7">
+                                        <input type="checkbox" id="is_published" class="mr-2"
+                                            checked=\${formData.is_published}
+                                            onChange=\${e => setFormData({...formData, is_published: e.target.checked})} />
+                                        <label for="is_published" class="text-sm font-medium text-gray-700">
+                                            <i class="fas fa-globe mr-1"></i> Publish this post
+                                        </label>
+                                    </div>
                                 </div>
                                 
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="is_published" class="mr-2"
-                                        checked=\${formData.is_published}
-                                        onChange=\${e => setFormData({...formData, is_published: e.target.checked})} />
-                                    <label for="is_published" class="text-sm font-medium text-gray-700">Publish this post</label>
+                                \${formData.featured_image && html\`
+                                    <div class="border rounded p-2 bg-gray-50">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Image Preview</label>
+                                        <img src=\${formData.featured_image} alt="Featured" class="max-h-32 rounded" />
+                                    </div>
+                                \`}
+                                
+                                <!-- Language Tabs -->
+                                <div class="border-t pt-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-3">
+                                        <i class="fas fa-language mr-1"></i> Post Content by Language
+                                    </label>
+                                    
+                                    <!-- Language Tab Headers -->
+                                    <div class="flex space-x-1 mb-4 border-b">
+                                        \${languageTabs.map(lang => html\`
+                                            <button type="button"
+                                                onClick=\${() => setActiveLanguageTab(lang.code)}
+                                                class="px-4 py-2 font-medium text-sm transition-colors
+                                                    \${activeLanguageTab === lang.code 
+                                                        ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50' 
+                                                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'}">
+                                                <span class="mr-1">\${lang.flag}</span>
+                                                \${lang.label}
+                                                \${lang.code !== 'zh' ? '*' : ''}
+                                            </button>
+                                        \`)}
+                                    </div>
+                                    
+                                    <!-- Language Tab Content -->
+                                    <div class="space-y-4">
+                                        \${languageTabs.map(lang => html\`
+                                            <div class="\${activeLanguageTab === lang.code ? '' : 'hidden'}">
+                                                <div class="space-y-4">
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                                            Title (\${lang.label}) \${lang.code !== 'zh' ? '*' : ''}
+                                                        </label>
+                                                        <input type="text" 
+                                                            class="w-full px-3 py-2 border rounded focus:ring-purple-500 focus:border-purple-500" 
+                                                            required=\${lang.code !== 'zh'}
+                                                            placeholder=\${lang.code === 'en' ? 'Enter post title' : lang.code === 'pt' ? 'Digite o título do post' : '輸入文章標題'}
+                                                            value=\${formData['title_' + lang.code]}
+                                                            onChange=\${e => setFormData({...formData, ['title_' + lang.code]: e.target.value})} />
+                                                    </div>
+                                                    
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                                            Excerpt (\${lang.label})
+                                                        </label>
+                                                        <textarea 
+                                                            class="w-full px-3 py-2 border rounded focus:ring-purple-500 focus:border-purple-500" 
+                                                            rows="3"
+                                                            placeholder=\${lang.code === 'en' ? 'Brief summary of the post' : lang.code === 'pt' ? 'Breve resumo do post' : '文章簡短摘要'}
+                                                            value=\${formData['excerpt_' + lang.code]}
+                                                            onChange=\${e => setFormData({...formData, ['excerpt_' + lang.code]: e.target.value})}></textarea>
+                                                    </div>
+                                                    
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                                            Content (\${lang.label})
+                                                        </label>
+                                                        <textarea 
+                                                            class="w-full px-3 py-2 border rounded focus:ring-purple-500 focus:border-purple-500" 
+                                                            rows="12"
+                                                            placeholder=\${lang.code === 'en' ? 'Write your post content here. Markdown is supported.' : lang.code === 'pt' ? 'Escreva o conteúdo do seu post aqui. Markdown é suportado.' : '在此輸入文章內容。支援Markdown格式。'}
+                                                            value=\${formData['content_' + lang.code]}
+                                                            onChange=\${e => setFormData({...formData, ['content_' + lang.code]: e.target.value})}></textarea>
+                                                        <p class="text-xs text-gray-500 mt-1">
+                                                            <i class="fab fa-markdown mr-1"></i>
+                                                            Markdown supported (headings, bold, italic, lists, links, etc.)
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        \`)}
+                                    </div>
                                 </div>
                             </div>
                             
                             <div class="mt-6 flex space-x-2">
                                 <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
-                                    Save
+                                    <i class="fas fa-save mr-2"></i> Save Post
                                 </button>
                                 <button type="button" onClick=\${onCancel}
                                     class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
-                                    Cancel
+                                    <i class="fas fa-times mr-2"></i> Cancel
                                 </button>
                             </div>
                         </form>
@@ -1263,43 +1635,7 @@ export function renderAdminPage(): string {
                 \`;
             }
             
-            function BlogCategoriesManager({ categories, onUpdate }) {
-                return html\`
-                    <div class="bg-white rounded-lg shadow overflow-hidden">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sort</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                \${categories.map(cat => html\`
-                                    <tr>
-                                        <td class="px-6 py-4">
-                                            <div class="text-sm">
-                                                <div class="font-medium text-gray-900">\${cat.name_en}</div>
-                                                <div class="text-gray-500">\${cat.name_pt}</div>
-                                                <div class="text-gray-400">\${cat.name_zh || '-'}</div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">\${cat.slug}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">\${cat.sort_order}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                \${cat.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                                                \${cat.is_active ? 'Active' : 'Inactive'}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                \`)}
-                            </tbody>
-                        </table>
-                    </div>
-                \`;
-            }
+
             
             // Contact Settings Manager Component
             function ContactManager() {
