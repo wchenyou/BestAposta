@@ -1,0 +1,105 @@
+import { Language, t } from '../utils/language';
+import { renderLayout } from './layout';
+
+export function renderHomePage(lang: Language, playerTypes: any[]): string {
+  const content = `
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                    ${t(lang, 'siteName')}
+                </h1>
+                <p class="text-xl mb-8">${t(lang, 'tagline')}</p>
+                <div class="flex justify-center space-x-4">
+                    <a href="#player-types" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                        <i class="fas fa-search mr-2"></i> ${t(lang, 'playerTypes.title')}
+                    </a>
+                    <a href="/blog" class="bg-purple-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+                        <i class="fas fa-book-open mr-2"></i> ${t(lang, 'nav.blog')}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Player Types Section -->
+    <section id="player-types" class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">${t(lang, 'playerTypes.title')}</h2>
+                <p class="text-gray-600">${t(lang, 'playerTypes.subtitle')}</p>
+            </div>
+            
+            <div class="space-y-8">
+                ${playerTypes.map(playerType => {
+                  const name = playerType[`name_${lang}`] || playerType.name_en;
+                  const description = playerType[`description_${lang}`] || playerType.description_en;
+                  const casinos = playerType.casinos_json ? JSON.parse(`[${playerType.casinos_json}]`) : [];
+                  
+                  return `
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas ${playerType.icon || 'fa-user'} text-purple-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">${name}</h3>
+                                ${description ? `<p class="text-gray-600">${description}</p>` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            ${casinos.map(casino => `
+                                <a href="/casino/${casino.slug}" class="casino-card bg-gray-50 rounded-lg p-4 text-center hover:bg-purple-50 transition">
+                                    ${casino.logo_url ? 
+                                      `<img src="${casino.logo_url}" alt="${casino.name}" class="h-12 mx-auto mb-2 object-contain">` :
+                                      `<div class="h-12 flex items-center justify-center mb-2">
+                                        <span class="text-lg font-bold text-purple-600">${casino.name}</span>
+                                      </div>`
+                                    }
+                                    <p class="text-sm font-semibold">${casino.name}</p>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                  `;
+                }).join('')}
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="bg-gray-100 py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Seguro e Confiável' : lang === 'zh' ? '安全可靠' : 'Safe & Reliable'}</h3>
+                    <p class="text-gray-600">${lang === 'pt' ? 'Apenas cassinos licenciados e confiáveis' : lang === 'zh' ? '僅推薦持牌可靠的娛樂城' : 'Only licensed and trusted casinos'}</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-gift text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Melhores Bônus' : lang === 'zh' ? '最佳獎金' : 'Best Bonuses'}</h3>
+                    <p class="text-gray-600">${lang === 'pt' ? 'Ofertas exclusivas para jogadores brasileiros' : lang === 'zh' ? '巴西玩家專屬優惠' : 'Exclusive offers for Brazilian players'}</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-headset text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Suporte 24/7' : lang === 'zh' ? '24/7 支援' : '24/7 Support'}</h3>
+                    <p class="text-gray-600">${lang === 'pt' ? 'Ajuda sempre disponível em português' : lang === 'zh' ? '提供葡萄牙語支援服務' : 'Help always available in Portuguese'}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+  `;
+  
+  return renderLayout(lang, t(lang, 'siteName'), content);
+}

@@ -1,21 +1,130 @@
-```txt
-npm install
-npm run dev
-```
+# Best Apostas - 巴西線上娛樂城資訊網站
 
-```txt
+## 專案概覽
+- **名稱**: Best Apostas
+- **目標**: 為巴西線上娛樂城玩家提供全面的娛樂城比較、評測和博彩相關資訊
+- **主要功能**: 
+  - 多語言支援（英語、巴西葡語、簡體中文）
+  - 娛樂城分類推薦（依玩家類型）
+  - 詳細娛樂城評測頁面
+  - 博彩相關文章部落格
+  - 管理後台系統
+
+## 網址
+- **開發環境**: https://3000-ihsba951ljfpzhbu01rl9-6532622b.e2b.dev
+- **生產環境**: 待部署到 Cloudflare Pages
+- **GitHub**: 待上傳
+
+## 資料架構
+### 資料模型
+- **admin_users**: 管理員使用者
+- **player_types**: 玩家類型分類
+- **casinos**: 娛樂城基本資訊
+- **casino_details**: 娛樂城詳細介紹（多語言）
+- **player_type_casinos**: 玩家類型與娛樂城關聯
+- **blog_categories**: 部落格分類
+- **blog_posts**: 部落格文章
+- **contact_settings**: 聯絡頁面設定
+
+### 儲存服務
+- **Cloudflare D1**: SQLite 關聯式資料庫
+- **Cloudflare KV**: 鍵值儲存（預留）
+
+### 資料流程
+1. 使用者訪問網站 → 檢測語言偏好
+2. 根據玩家類型展示推薦娛樂城
+3. 點擊娛樂城查看詳細評測
+4. 閱讀博彩相關文章增進知識
+
+## 使用指南
+
+### 一般使用者
+1. **首頁**: 查看依玩家類型分類的娛樂城推薦
+2. **娛樂城詳情**: 點擊任一娛樂城查看詳細評測、評分、優缺點分析
+3. **部落格**: 閱讀博彩策略、規則教學、體育時事等文章
+4. **語言切換**: 點擊右上角語言按鈕切換介面語言
+
+### 管理員
+1. 訪問 `/admin` 進入管理後台
+2. 使用預設帳號密碼登入：
+   - 帳號：`admin`
+   - 密碼：`admin123`
+3. 管理功能：
+   - 娛樂城管理：新增、編輯、刪除娛樂城資訊
+   - 玩家類型管理：設定玩家類型與推薦娛樂城
+   - 文章管理：發布博彩相關文章
+   - 聯絡設定：更新聯絡頁面內容
+
+## 目前完成功能
+✅ 多語言系統架構（英語、葡語、中文）
+✅ 自動語言檢測（基於 IP、瀏覽器設定）
+✅ 玩家類型分類展示
+✅ 娛樂城基本資訊展示
+✅ 響應式設計（手機、平板、電腦）
+✅ 管理員登入系統
+✅ 資料庫架構與初始資料
+
+## 待實作功能
+- [ ] 完整管理後台 CRUD 功能
+- [ ] 娛樂城詳細資料編輯器
+- [ ] 部落格文章編輯器（富文本編輯）
+- [ ] 圖片上傳功能
+- [ ] SEO 優化（meta tags、sitemap）
+- [ ] 訪問統計分析
+- [ ] 自動抓取娛樂城資訊
+- [ ] 電子郵件通知系統
+
+## 建議開發步驟
+1. **完善管理後台**：實作完整的 CRUD 介面
+2. **資料充實**：為每個娛樂城添加詳細評測內容
+3. **SEO 優化**：添加 meta tags、結構化資料
+4. **部署上線**：部署到 Cloudflare Pages
+5. **內容營運**：定期更新文章與娛樂城資訊
+
+## 部署狀態
+- **平台**: Cloudflare Pages
+- **狀態**: ✅ 開發環境運行中
+- **技術堆疊**: Hono + TypeScript + Cloudflare D1 + TailwindCSS
+- **最後更新**: 2025-09-17
+
+## 開發指令
+```bash
+# 本地開發
+npm run dev:sandbox
+
+# 建置專案
+npm run build
+
+# 資料庫遷移
+npm run db:migrate:local
+
+# 重置資料庫
+npm run db:reset
+
+# 部署到 Cloudflare Pages
 npm run deploy
 ```
 
-[For generating/synchronizing types based on your Worker configuration run](https://developers.cloudflare.com/workers/wrangler/commands/#types):
+## 娛樂城列表
+目前系統已建立以下巴西市場娛樂城資料：
+1. Betwinner
+2. 22BET
+3. BETANO
+4. BET365
+5. 1xBET
+6. Estrela Bet
+7. Blaze
+8. BR4BET
+9. Lottoland Sportsbook
+10. Seguro Bet
+11. Bateu Bet
+12. Brazino777
 
-```txt
-npm run cf-typegen
-```
-
-Pass the `CloudflareBindings` as generics when instantiation `Hono`:
-
-```ts
-// src/index.ts
-const app = new Hono<{ Bindings: CloudflareBindings }>()
-```
+每個娛樂城都需要進一步補充：
+- 歡迎獎金詳情
+- 支付方式說明
+- 遊戲種類介紹
+- 客戶服務評價
+- 行動裝置體驗
+- 安全性說明
+- 負責任博彩政策
