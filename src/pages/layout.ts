@@ -39,6 +39,9 @@ export function renderLayout(lang: Language, title: string, content: string): st
                         <a href="/" class="text-gray-600 hover:text-purple-600 transition">
                             <i class="fas fa-home mr-1"></i> ${t(lang, 'nav.home')}
                         </a>
+                        <a href="/casinos" class="text-gray-600 hover:text-purple-600 transition">
+                            <i class="fas fa-dice mr-1"></i> ${t(lang, 'nav.casinos')}
+                        </a>
                         <a href="/blog" class="text-gray-600 hover:text-purple-600 transition">
                             <i class="fas fa-blog mr-1"></i> ${t(lang, 'nav.blog')}
                         </a>
@@ -49,7 +52,7 @@ export function renderLayout(lang: Language, title: string, content: string): st
                     
                     <!-- Language Switcher Dropdown -->
                     <div class="relative">
-                        <select onchange="window.location.href='/set-language/' + this.value" 
+                        <select id="language-selector" 
                                 class="bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-gray-700 hover:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer appearance-none">
                             <option value="en" ${lang === 'en' ? 'selected' : ''}>🇬🇧 English</option>
                             <option value="pt" ${lang === 'pt' ? 'selected' : ''}>🇧🇷 Português</option>
@@ -70,6 +73,9 @@ export function renderLayout(lang: Language, title: string, content: string): st
                 <div id="mobile-menu" class="hidden md:hidden pb-4">
                     <a href="/" class="block py-2 text-gray-600 hover:text-purple-600">
                         <i class="fas fa-home mr-2"></i> ${t(lang, 'nav.home')}
+                    </a>
+                    <a href="/casinos" class="block py-2 text-gray-600 hover:text-purple-600">
+                        <i class="fas fa-dice mr-2"></i> ${t(lang, 'nav.casinos')}
                     </a>
                     <a href="/blog" class="block py-2 text-gray-600 hover:text-purple-600">
                         <i class="fas fa-blog mr-2"></i> ${t(lang, 'nav.blog')}
@@ -104,6 +110,16 @@ export function renderLayout(lang: Language, title: string, content: string): st
                 const menu = document.getElementById('mobile-menu');
                 menu.classList.toggle('hidden');
             }
+            
+            // Language selector
+            document.addEventListener('DOMContentLoaded', function() {
+                const selector = document.getElementById('language-selector');
+                if (selector) {
+                    selector.addEventListener('change', function() {
+                        window.location.href = '/set-language/' + this.value;
+                    });
+                }
+            });
         </script>
     </body>
     </html>

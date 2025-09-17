@@ -5,6 +5,7 @@ import { Bindings } from './types';
 import { detectLanguage, t } from './utils/language';
 import { renderHomePage } from './pages/home';
 import { renderCasinoPage } from './pages/casino';
+import { renderCasinosPage } from './pages/casinos';
 import { renderBlogPage } from './pages/blog';
 import { renderContactPage } from './pages/contact';
 import { renderAdminPage } from './pages/admin';
@@ -52,6 +53,41 @@ app.get('/', async (c) => {
   } catch (error) {
     console.error('Error loading home page:', error);
     return c.html(renderHomePage(lang, []));
+  }
+});
+
+// Casinos list page
+app.get('/casinos', async (c) => {
+  const lang = detectLanguage(c);
+  const { env } = c;
+  
+  try {
+    // Get all active casinos with their details
+    const casinos = await env.DB.prepare(`
+      SELECT 
+        c.*,
+        json_object(
+          'welcome_bonus', cd.welcome_bonus,
+          'min_deposit', cd.min_deposit,
+          'payment_methods', cd.payment_methods,
+          'rating_overall', cd.rating_overall
+        ) as details
+      FROM casinos c
+      LEFT JOIN casino_details cd ON c.id = cd.casino_id AND cd.language = ?
+      WHERE c.is_active = 1
+      ORDER BY c.sort_order, c.name
+    `).bind(lang).all();
+    
+    // Parse the JSON details
+    const casinosWithDetails = casinos.results?.map(casino => ({
+      ...casino,
+      details: casino.details ? [JSON.parse(casino.details as string)] : []
+    })) || [];
+    
+    return c.html(renderCasinosPage(lang, casinosWithDetails));
+  } catch (error) {
+    console.error('Error loading casinos page:', error);
+    return c.html(renderCasinosPage(lang, []));
   }
 });
 
