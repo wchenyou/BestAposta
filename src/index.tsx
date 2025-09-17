@@ -28,26 +28,22 @@ app.get('/', async (c) => {
   const { env } = c;
   
   try {
-    // Get player types with casinos from casino_info table
+    // Get player types with casinos joining casinos table
     const playerTypes = await env.DB.prepare(`
       SELECT 
         pt.*,
         GROUP_CONCAT(
-          DISTINCT json_object(
-            'id', ci.casino_id,
-            'slug', ci.slug,
-            'name', ci.casino_name,
-            'logo_url', ci.logo_url,
-            'affiliate_link', ci.affiliate_link
+          json_object(
+            'id', c.id,
+            'slug', c.slug,
+            'name', c.name,
+            'logo_url', c.logo_url,
+            'affiliate_link', c.affiliate_link
           )
         ) as casinos_json
       FROM player_types pt
       LEFT JOIN player_type_casinos ptc ON pt.id = ptc.player_type_id
-      LEFT JOIN (
-        SELECT DISTINCT casino_id, slug, casino_name, logo_url, affiliate_link, is_active
-        FROM casino_info 
-        WHERE language = 'en' AND is_active = 1
-      ) ci ON ptc.casino_id = ci.casino_id
+      LEFT JOIN casinos c ON ptc.casino_id = c.id AND c.is_active = 1
       WHERE pt.is_active = 1
       GROUP BY pt.id
       ORDER BY pt.sort_order

@@ -119,11 +119,7 @@ export function renderLayout(lang: Language, title: string, content: string): st
                 
                 <!-- Copyright and Basic Info -->
                 <div class="text-center">
-                    <p class="mb-2">© 2024 ${t(lang, 'siteName')}. ${lang === 'zh' ? '版權所有' : lang === 'pt' ? 'Todos os direitos reservados' : 'All rights reserved'}.</p>
-                    <p class="text-sm text-gray-400">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        ${lang === 'zh' ? '18歲以上 | 請負責任地參與博彩' : lang === 'pt' ? '18+ | Jogue com responsabilidade' : '18+ | Please gamble responsibly'}
-                    </p>
+                    <p class="mb-2">© 2025 ${t(lang, 'siteName')}. ${lang === 'zh' ? '版權所有' : lang === 'pt' ? 'Todos os direitos reservados' : 'All rights reserved'}.</p>
                 </div>
             </div>
         </footer>
