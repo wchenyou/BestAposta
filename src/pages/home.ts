@@ -49,7 +49,7 @@ export function renderHomePage(lang: Language, playerTypes: any[]): string {
                             </div>
                         </div>
                         
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                             ${casinos.map(casino => `
                                 <a href="/casino/${casino.slug}" class="casino-card bg-white border-2 border-gray-200 rounded-lg overflow-hidden text-center hover:border-purple-500 hover:shadow-lg transition">
                                     <div class="h-16 flex items-center justify-center bg-gray-50">

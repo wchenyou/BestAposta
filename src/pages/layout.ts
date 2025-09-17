@@ -31,8 +31,12 @@ export function renderLayout(lang: Language, title: string, content: string): st
         <nav class="bg-white shadow-md sticky top-0 z-50">
             <div class="container mx-auto px-4">
                 <div class="flex justify-between items-center py-4">
-                    <a href="/" class="text-2xl font-bold text-purple-600">
-                        <i class="fas fa-dice mr-2"></i>${t(lang, 'siteName')}
+                    <a href="/" class="text-lg md:text-2xl font-bold text-purple-600">
+                        <i class="fas fa-dice mr-1 md:mr-2"></i>
+                        <!-- Show abbreviated name on mobile -->
+                        <span class="md:hidden">YBC</span>
+                        <!-- Show full name on desktop -->
+                        <span class="hidden md:inline">${t(lang, 'siteName')}</span>
                     </a>
                     
                     <div class="hidden md:flex space-x-6">
@@ -52,14 +56,24 @@ export function renderLayout(lang: Language, title: string, content: string): st
                     
                     <!-- Language Switcher Dropdown -->
                     <div class="relative">
+                        <!-- Desktop: Show flag + text -->
                         <select onchange="window.location.href='/set-language/' + this.value; return false;" 
-                                class="bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-gray-700 hover:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer appearance-none">
+                                class="hidden md:block bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-gray-700 hover:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer appearance-none">
                             <option value="en" ${lang === 'en' ? 'selected' : ''}>🇬🇧 English</option>
                             <option value="pt" ${lang === 'pt' ? 'selected' : ''}>🇧🇷 Português</option>
                             <option value="zh" ${lang === 'zh' ? 'selected' : ''}>🇨🇳 简体中文</option>
                         </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <i class="fas fa-chevron-down text-sm"></i>
+                        
+                        <!-- Mobile: Show only flags -->
+                        <select onchange="window.location.href='/set-language/' + this.value; return false;" 
+                                class="md:hidden bg-white border border-gray-300 rounded-lg px-2 py-2 pr-6 text-gray-700 hover:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer appearance-none text-lg">
+                            <option value="en" ${lang === 'en' ? 'selected' : ''}>🇬🇧</option>
+                            <option value="pt" ${lang === 'pt' ? 'selected' : ''}>🇧🇷</option>
+                            <option value="zh" ${lang === 'zh' ? 'selected' : ''}>🇨🇳</option>
+                        </select>
+                        
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1 md:px-2 text-gray-700">
+                            <i class="fas fa-chevron-down text-xs md:text-sm"></i>
                         </div>
                     </div>
                     
