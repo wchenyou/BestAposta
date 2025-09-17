@@ -1,159 +1,136 @@
-# Best Apostas - 巴西線上娛樂城資訊網站
+# Seu Melhor Cassino (Your Best Casino)
 
-## 專案概覽
-- **名稱**: Best Apostas
-- **目標**: 為巴西線上娛樂城玩家提供全面的娛樂城比較、評測和博彩相關資訊
-- **主要功能**: 
-  - 多語言支援（英語、巴西葡語、簡體中文）
-  - 娛樂城分類推薦（依玩家類型）
-  - 詳細娛樂城評測頁面
-  - 博彩相關文章部落格
-  - 管理後台系統
+## Project Overview
+- **Name**: Seu Melhor Cassino (您的最佳賭場)
+- **Goal**: Comprehensive Brazilian online casino review and comparison platform
+- **Features**: Multi-language support (PT/EN/ZH), casino comparisons, blog system, player type matching
+- **Target Audience**: Brazilian and international online casino players
 
-## 網址
-- **開發環境**: https://3000-ihsba951ljfpzhbu01rl9-6532622b.e2b.dev
-- **生產環境**: 待部署到 Cloudflare Pages
-- **GitHub**: 待上傳
+## URLs
+- **Production**: https://your-project.pages.dev (pending deployment)
+- **GitHub**: https://github.com/wchenyou/BestAposta
+- **Local Development**: http://localhost:3000
 
-## 資料架構
-### 資料模型
-- **admin_users**: 管理員使用者
-- **player_types**: 玩家類型分類
-- **casinos**: 娛樂城基本資訊
-- **casino_details**: 娛樂城詳細介紹（多語言）
-- **player_type_casinos**: 玩家類型與娛樂城關聯
-- **blog_categories**: 部落格分類
-- **blog_posts**: 部落格文章
-- **contact_settings**: 聯絡頁面設定
+## Key Features
 
-### 儲存服務
-- **Cloudflare D1**: SQLite 關聯式資料庫
-- **Cloudflare KV**: 鍵值儲存（預留）
+### ✅ Completed Features
+1. **Multi-Language Support** - Complete PT/EN/ZH translations
+2. **12 Brazilian Casinos** - Full information for all major casinos:
+   - Betwinner, 22BET, BETANO, BET365, 1xBET
+   - Estrela Bet, Blaze, BR4BET, Lottoland
+   - Seguro Bet, Bateu Bet, Brazino777
+3. **Player Type Matching** - 5 player categories with casino recommendations
+4. **Blog System** - Multi-language blog with tabbed editor
+5. **Admin Panel** - Complete management interface with:
+   - Casino management with logo upload
+   - Blog post editor with language tabs
+   - Player type management
+   - Category management
+   - Contact settings
+6. **Responsive Design** - Mobile-friendly interface
+7. **SEO Optimized** - Proper meta tags and structure
 
-### 資料流程
-1. 使用者訪問網站 → 檢測語言偏好
-2. 根據玩家類型展示推薦娛樂城
-3. 點擊娛樂城查看詳細評測
-4. 閱讀博彩相關文章增進知識
+### 🔄 Features In Progress
+- None currently
 
-## 使用指南
+### 📋 Recommended Next Steps
+1. **Deploy to Cloudflare Pages** for production
+2. **Add more blog content** to improve SEO
+3. **Implement user reviews/ratings** system
+4. **Add casino comparison tool** for side-by-side comparisons
+5. **Integrate analytics** (Google Analytics or similar)
+6. **Add newsletter subscription** functionality
+7. **Implement affiliate link tracking**
 
-### 一般使用者
-1. **首頁**: 查看依玩家類型分類的娛樂城推薦
-2. **娛樂城詳情**: 點擊任一娛樂城查看詳細評測、評分、優缺點分析
-3. **部落格**: 閱讀博彩策略、規則教學、體育時事等文章
-4. **語言切換**: 點擊右上角語言按鈕切換介面語言
+## Data Architecture
+- **Database**: Cloudflare D1 (SQLite)
+- **Storage Services**: 
+  - D1 for relational data (casinos, blog posts, player types)
+  - Future: KV for session data, R2 for image storage
+- **Data Models**:
+  - `casino_info` - Casino details in 3 languages
+  - `blog_posts` - Blog articles with multi-language support
+  - `blog_categories` - Blog categorization
+  - `player_types` - Player categorization
+  - `player_type_casinos` - Casino associations
+  - `contact_settings` - Site contact information
 
-### 管理員
-1. 直接在網址列輸入 `/admin` 進入管理後台（導航欄已隱藏連結）
-2. 使用預設帳號密碼登入：
-   - 帳號：`admin`
-   - 密碼：`admin123`
-3. 管理功能：
-   - **娛樂城管理**：
-     - 新增、編輯、刪除娛樂城
-     - 設定娛樂城狀態（啟用/停用）
-     - 編輯基本資訊（名稱、Logo、網址、聯盟連結）
-     - 管理多語言內容（概覽資訊、詳細介紹）
-     - 設定排序優先順序
-   - **玩家類型管理**：
-     - 建立不同玩家類型分類
-     - 關聯推薦娛樂城
-     - 多語言名稱與描述
-   - **部落格管理**：
-     - 發布、編輯、刪除文章
-     - 管理文章分類
-     - 多語言內容支援
-   - **聯絡設定**：
-     - 更新聯絡資訊
-     - 編輯社交媒體連結
-     - 設定營業時間
+## Tech Stack
+- **Framework**: Hono (Cloudflare Workers)
+- **Database**: Cloudflare D1
+- **Frontend**: Vanilla JS + HTM (Preact) for admin
+- **Styling**: Tailwind CSS (CDN)
+- **Icons**: Font Awesome
+- **Deployment**: Cloudflare Pages
+- **Development**: Vite + Wrangler
 
-## 最新更新 (2025-09-17)
-✅ **娛樂城資訊架構全面重構**
-- 新增詳細的娛樂城資訊欄位（營運公司、成立時間、牌照、支援國家等）
-- 重新設計娛樂城詳情頁面，展示更完整的資訊
-- 將「Blog」改為「相關文章」以更清楚表達內容性質
-- 所有「Visit Casino」按鈕改為「立即遊戲」
-- 新增聯絡表單資料儲存功能
-- 首頁宣傳區塊調整為更中性的內容
+## User Guide
 
-## 目前完成功能
-✅ 多語言系統架構（英語、葡語、簡體中文）
-✅ 下拉式語言切換選單
-✅ 自動語言檢測（基於 IP、瀏覽器設定）
-✅ 玩家類型分類展示
-✅ 娛樂城詳細資訊展示（包含評分、優缺點、詳細介紹）
-✅ 響應式設計（手機、平板、電腦）
-✅ 管理員登入系統（隱藏入口：/admin）
-✅ 完整的娛樂城資料（12家娛樂城詳細內容）
-✅ **完整娛樂城管理功能（基本資訊、狀態、多語言內容）**
-✅ **玩家類型管理（CRUD、關聯娛樂城）**
-✅ **部落格管理系統（文章、分類）**
-✅ **聯絡頁面設定管理**
+### For Visitors
+1. Browse casinos on the homepage
+2. Click "View Details" to see full casino information
+3. Use language switcher (PT/EN/ZH) at top right
+4. Find casinos by player type in "Player Types" section
+5. Read blog articles for tips and guides
+6. Click "Play Now" to visit casino sites
 
-## 待實作功能
-- [ ] 富文本編輯器（部落格文章）
-- [ ] 圖片上傳功能（娛樂城 Logo）
-- [ ] SEO 優化（meta tags、sitemap）
-- [ ] 訪問統計分析
-- [ ] 娛樂城資料自動更新
-- [ ] 電子郵件通知系統
-- [ ] 使用者評論功能
+### For Administrators
+1. Access admin panel at `/admin`
+2. Manage casinos, blog posts, and settings
+3. Upload casino logos directly in the form
+4. Use language tabs for multi-language content
+5. Preview changes before publishing
 
-## 建議開發步驟
-1. **完善管理後台**：實作完整的 CRUD 介面
-2. **資料充實**：為每個娛樂城添加詳細評測內容
-3. **SEO 優化**：添加 meta tags、結構化資料
-4. **部署上線**：部署到 Cloudflare Pages
-5. **內容營運**：定期更新文章與娛樂城資訊
+## Development
 
-## 部署狀態
-- **平台**: Cloudflare Pages
-- **狀態**: ✅ 開發環境運行中
-- **技術堆疊**: Hono + TypeScript + Cloudflare D1 + TailwindCSS
-- **最後更新**: 2025-09-17
-
-## 開發指令
+### Setup
 ```bash
-# 本地開發
-npm run dev:sandbox
-
-# 建置專案
+npm install
 npm run build
-
-# 資料庫遷移
-npm run db:migrate:local
-
-# 重置資料庫
-npm run db:reset
-
-# 部署到 Cloudflare Pages
-npm run deploy
 ```
 
-## 娛樂城列表
-目前系統已建立以下巴西市場娛樂城資料：
-1. Betwinner
-2. 22BET
-3. BETANO
-4. BET365
-5. 1xBET
-6. Estrela Bet
-7. Blaze
-8. BR4BET
-9. Lottoland Sportsbook
-10. Seguro Bet
-11. Bateu Bet
-12. Brazino777
+### Local Development
+```bash
+# Start with PM2
+pm2 start ecosystem.config.cjs
 
-每個娛樂城都已包含：
-- ✅ 歡迎獎金詳情（三種語言）
-- ✅ 支付方式說明（PIX、信用卡、加密貨幣等）
-- ✅ 遊戲種類介紹
-- ✅ 客戶服務評價
-- ✅ 行動裝置體驗描述
-- ✅ 安全性說明
-- ✅ 負責任博彩政策
-- ✅ 優缺點分析
-- ✅ 各項目評分（0-100分）
+# Or use wrangler directly
+npm run dev:sandbox
+```
+
+### Database Management
+```bash
+# Apply migrations locally
+npm run db:migrate:local
+
+# Reset database
+npm run db:reset
+```
+
+## Deployment
+- **Platform**: Cloudflare Pages
+- **Status**: ✅ Ready for deployment
+- **Branch**: master
+- **Last Updated**: 2024-01-17
+
+### Deploy Commands
+```bash
+# Build project
+npm run build
+
+# Deploy to Cloudflare Pages
+wrangler pages deploy dist --project-name seu-melhor-cassino
+```
+
+## Recent Updates (2024-01-17)
+- ✅ Renamed site from "Best Apostas" to "Seu Melhor Cassino"
+- ✅ Added complete information for 12 Brazilian casinos
+- ✅ Implemented blog system with 3 sample articles
+- ✅ Added language tabs to blog editor
+- ✅ Added logo upload functionality for casinos
+- ✅ Fixed player type associations (no minimum requirement)
+- ✅ Updated homepage with new tagline and CTA
+- ✅ Added "Play Now" button at bottom of casino pages
+
+## Contact
+For questions or support, please contact through the admin panel contact settings.
