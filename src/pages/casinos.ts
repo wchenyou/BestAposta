@@ -33,16 +33,16 @@ export function renderCasinosPage(lang: Language, casinos: any[]): string {
                         
                         ${detail ? `
                         <div class="space-y-2 mb-4">
-                            ${detail.welcome_bonus ? `
+                            ${detail.supported_languages ? `
                             <div class="flex items-center text-sm">
-                                <i class="fas fa-gift text-purple-500 w-5"></i>
-                                <span class="ml-2 text-gray-700">${detail.welcome_bonus}</span>
+                                <i class="fas fa-language text-blue-500 w-5"></i>
+                                <span class="ml-2 text-gray-700">${detail.supported_languages}</span>
                             </div>` : ''}
                             
-                            ${detail.min_deposit ? `
+                            ${detail.supported_currencies ? `
                             <div class="flex items-center text-sm">
-                                <i class="fas fa-coins text-purple-500 w-5"></i>
-                                <span class="ml-2 text-gray-700">${t(lang, 'casino.minDeposit')}: ${detail.min_deposit}</span>
+                                <i class="fas fa-money-bill-wave text-green-500 w-5"></i>
+                                <span class="ml-2 text-gray-700">${detail.supported_currencies}</span>
                             </div>` : ''}
                             
                             ${detail.payment_methods ? `
@@ -50,7 +50,6 @@ export function renderCasinosPage(lang: Language, casinos: any[]): string {
                                 <i class="fas fa-credit-card text-purple-500 w-5"></i>
                                 <span class="ml-2 text-gray-700 truncate">${detail.payment_methods}</span>
                             </div>` : ''}
-                            
 
                         </div>
                         ` : `

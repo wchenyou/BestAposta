@@ -74,8 +74,8 @@ app.get('/casinos', async (c) => {
         c.sort_order,
         c.is_active,
         json_object(
-          'welcome_bonus', ci.licenses_safety,
-          'min_deposit', ci.payment_methods,
+          'supported_languages', ci.supported_languages,
+          'supported_currencies', ci.supported_currencies,
           'payment_methods', ci.payment_methods,
           'rating_overall', 4.5
         ) as details
