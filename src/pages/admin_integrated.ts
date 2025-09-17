@@ -1,4 +1,4 @@
-// Admin panel with integrated casino form
+import { html } from 'htm/preact';
 
 export function renderAdminPage() {
   return html`
