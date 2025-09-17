@@ -51,14 +51,14 @@ export function renderHomePage(lang: Language, playerTypes: any[]): string {
                         
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             ${casinos.map(casino => `
-                                <a href="/casino/${casino.slug}" class="casino-card bg-gray-50 rounded-lg p-4 text-center hover:bg-purple-50 transition">
-                                    ${casino.logo_url ? 
-                                      `<img src="${casino.logo_url}" alt="${casino.name}" class="h-12 mx-auto mb-2 object-contain">` :
-                                      `<div class="h-12 flex items-center justify-center mb-2">
-                                        <span class="text-lg font-bold text-purple-600">${casino.name}</span>
-                                      </div>`
-                                    }
-                                    <p class="text-sm font-semibold">${casino.name}</p>
+                                <a href="/casino/${casino.slug}" class="casino-card bg-white border-2 border-gray-200 rounded-lg p-4 text-center hover:border-purple-500 hover:shadow-lg transition">
+                                    <div class="h-16 flex items-center justify-center mb-2">
+                                        ${casino.logo_url ? 
+                                          `<img src="${casino.logo_url}" alt="${casino.name}" class="max-h-full max-w-full object-contain">` :
+                                          `<span class="text-lg font-bold text-purple-600">${casino.name}</span>`
+                                        }
+                                    </div>
+                                    <p class="text-sm font-semibold text-gray-700">${casino.name}</p>
                                 </a>
                             `).join('')}
                         </div>

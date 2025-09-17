@@ -21,15 +21,12 @@ export function renderCasinosPage(lang: Language, casinos: any[]): string {
               const detail = casino.details ? casino.details[0] : null;
               return `
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition casino-card">
-                    ${casino.logo_url ? `
                     <div class="h-32 bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center p-4">
-                        <img src="${casino.logo_url}" alt="${casino.name}" class="max-h-20 max-w-full object-contain">
+                        ${casino.logo_url ? 
+                          `<img src="${casino.logo_url}" alt="${casino.name}" class="max-h-20 max-w-full object-contain">` :
+                          `<span class="text-purple-600 text-2xl font-bold">${casino.name}</span>`
+                        }
                     </div>
-                    ` : `
-                    <div class="h-32 bg-gradient-to-br from-purple-600 to-purple-700 flex items-center justify-center">
-                        <span class="text-white text-2xl font-bold">${casino.name}</span>
-                    </div>
-                    `}
                     
                     <div class="p-6">
                         <h3 class="text-xl font-bold mb-2">${casino.name}</h3>
@@ -54,17 +51,7 @@ export function renderCasinosPage(lang: Language, casinos: any[]): string {
                                 <span class="ml-2 text-gray-700 truncate">${detail.payment_methods}</span>
                             </div>` : ''}
                             
-                            ${detail.rating_overall > 0 ? `
-                            <div class="flex items-center justify-between mt-3">
-                                <span class="text-sm font-semibold text-gray-600">${t(lang, 'ratings.overall')}</span>
-                                <div class="flex items-center">
-                                    <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
-                                        <div class="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full" 
-                                             style="width: ${detail.rating_overall}%"></div>
-                                    </div>
-                                    <span class="text-sm font-bold text-purple-600">${detail.rating_overall}%</span>
-                                </div>
-                            </div>` : ''}
+
                         </div>
                         ` : `
                         <p class="text-gray-600 text-sm mb-4">

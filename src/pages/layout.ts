@@ -52,7 +52,7 @@ export function renderLayout(lang: Language, title: string, content: string): st
                     
                     <!-- Language Switcher Dropdown -->
                     <div class="relative">
-                        <select id="language-selector" 
+                        <select onchange="window.location.href='/set-language/' + this.value; return false;" 
                                 class="bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-gray-700 hover:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer appearance-none">
                             <option value="en" ${lang === 'en' ? 'selected' : ''}>🇬🇧 English</option>
                             <option value="pt" ${lang === 'pt' ? 'selected' : ''}>🇧🇷 Português</option>
@@ -110,16 +110,6 @@ export function renderLayout(lang: Language, title: string, content: string): st
                 const menu = document.getElementById('mobile-menu');
                 menu.classList.toggle('hidden');
             }
-            
-            // Language selector
-            document.addEventListener('DOMContentLoaded', function() {
-                const selector = document.getElementById('language-selector');
-                if (selector) {
-                    selector.addEventListener('change', function() {
-                        window.location.href = '/set-language/' + this.value;
-                    });
-                }
-            });
         </script>
     </body>
     </html>
