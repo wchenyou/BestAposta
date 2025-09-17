@@ -10,7 +10,7 @@ export const translations = {
     nav: {
       home: 'Home',
       casinos: 'Casinos',
-      blog: 'Blog',
+      blog: 'Related Articles',
       contact: 'Contact',
       admin: 'Admin'
     },
@@ -68,7 +68,7 @@ export const translations = {
     nav: {
       home: 'Início',
       casinos: 'Cassinos',
-      blog: 'Blog',
+      blog: 'Artigos Relacionados',
       contact: 'Contato',
       admin: 'Admin'
     },

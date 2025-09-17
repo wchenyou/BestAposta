@@ -71,11 +71,15 @@ export function renderBlogPage(lang: Language, categories: any[], posts: any[], 
                       const excerpt = post[`excerpt_${lang}`] || post.excerpt_en || '';
                       
                       return `
-                        <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
+                        <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col md:flex-row">
                             ${post.featured_image ? `
-                            <img src="${post.featured_image}" alt="${title}" class="w-full h-48 object-cover">
+                            <div class="md:w-1/3">
+                                <div class="relative pb-[56.25%] md:pb-0 md:h-full">
+                                    <img src="${post.featured_image}" alt="${title}" class="absolute inset-0 w-full h-full object-cover md:relative">
+                                </div>
+                            </div>
                             ` : ''}
-                            <div class="p-6">
+                            <div class="p-6 ${post.featured_image ? 'md:w-2/3' : 'w-full'}">
                                 <div class="flex items-center text-sm text-gray-600 mb-2">
                                     <span class="bg-purple-100 text-purple-600 px-2 py-1 rounded mr-2">
                                         ${post.category_name}
