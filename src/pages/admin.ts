@@ -1,7 +1,7 @@
 // Admin panel with integrated casino form
 
-export function renderAdminPage() {
-  return html`
+export function renderAdminPage(): string {
+  return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
