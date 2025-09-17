@@ -45,16 +45,19 @@ export function renderLayout(lang: Language, title: string, content: string): st
                         <a href="/contact" class="text-gray-600 hover:text-purple-600 transition">
                             <i class="fas fa-envelope mr-1"></i> ${t(lang, 'nav.contact')}
                         </a>
-                        <a href="/admin" class="text-gray-600 hover:text-purple-600 transition">
-                            <i class="fas fa-lock mr-1"></i> ${t(lang, 'nav.admin')}
-                        </a>
                     </div>
                     
-                    <!-- Language Switcher -->
-                    <div class="flex items-center space-x-2">
-                        <a href="/set-language/en" class="px-2 py-1 rounded ${lang === 'en' ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}">EN</a>
-                        <a href="/set-language/pt" class="px-2 py-1 rounded ${lang === 'pt' ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}">PT</a>
-                        <a href="/set-language/zh" class="px-2 py-1 rounded ${lang === 'zh' ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}">中文</a>
+                    <!-- Language Switcher Dropdown -->
+                    <div class="relative">
+                        <select onchange="window.location.href='/set-language/' + this.value" 
+                                class="bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-gray-700 hover:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer appearance-none">
+                            <option value="en" ${lang === 'en' ? 'selected' : ''}>🇬🇧 English</option>
+                            <option value="pt" ${lang === 'pt' ? 'selected' : ''}>🇧🇷 Português</option>
+                            <option value="zh" ${lang === 'zh' ? 'selected' : ''}>🇨🇳 简体中文</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </div>
                     </div>
                     
                     <!-- Mobile menu button -->
@@ -73,9 +76,6 @@ export function renderLayout(lang: Language, title: string, content: string): st
                     </a>
                     <a href="/contact" class="block py-2 text-gray-600 hover:text-purple-600">
                         <i class="fas fa-envelope mr-2"></i> ${t(lang, 'nav.contact')}
-                    </a>
-                    <a href="/admin" class="block py-2 text-gray-600 hover:text-purple-600">
-                        <i class="fas fa-lock mr-2"></i> ${t(lang, 'nav.admin')}
                     </a>
                 </div>
             </div>

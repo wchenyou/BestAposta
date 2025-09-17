@@ -119,59 +119,59 @@ export const translations = {
   },
   zh: {
     siteName: 'Best Apostas',
-    tagline: '巴西線上娛樂城指南',
+    tagline: '巴西在线娱乐城指南',
     nav: {
-      home: '首頁',
-      casinos: '娛樂城',
-      blog: '部落格',
-      contact: '聯絡我們',
+      home: '首页',
+      casinos: '娱乐城',
+      blog: '博客',
+      contact: '联系我们',
       admin: '管理'
     },
     playerTypes: {
-      title: '找到適合您的娛樂城',
-      subtitle: '發現適合您遊戲風格的娛樂城'
+      title: '找到适合您的娱乐城',
+      subtitle: '发现适合您游戏风格的娱乐城'
     },
     casino: {
-      visitSite: '訪問娛樂城',
-      bonus: '歡迎獎金',
+      visitSite: '访问娱乐城',
+      bonus: '欢迎奖金',
       minDeposit: '最低存款',
       paymentMethods: '支付方式',
-      license: '許可證',
+      license: '许可证',
       founded: '成立年份',
-      pros: '優點',
-      cons: '缺點',
-      overview: '概覽',
-      details: '詳細評論',
-      games: '遊戲與軟體',
-      payments: '支付選項',
-      support: '客戶支援',
-      mobile: '行動體驗',
-      security: '安全與公平',
-      responsibleGaming: '負責任博彩'
+      pros: '优点',
+      cons: '缺点',
+      overview: '概览',
+      details: '详细评论',
+      games: '游戏与软件',
+      payments: '支付选项',
+      support: '客户支持',
+      mobile: '移动体验',
+      security: '安全与公平',
+      responsibleGaming: '负责任博彩'
     },
     ratings: {
-      overall: '總體評分',
-      bonus: '獎金',
-      games: '遊戲',
+      overall: '总体评分',
+      bonus: '奖金',
+      games: '游戏',
       payment: '支付',
-      support: '支援',
-      mobile: '行動'
+      support: '支持',
+      mobile: '移动'
     },
     blog: {
-      readMore: '閱讀更多',
-      categories: '分類',
+      readMore: '阅读更多',
+      categories: '分类',
       recentPosts: '最新文章',
-      views: '瀏覽'
+      views: '浏览'
     },
     contact: {
-      title: '聯絡我們',
-      email: '電子郵件',
-      message: '訊息',
-      send: '發送訊息'
+      title: '联系我们',
+      email: '电子邮件',
+      message: '消息',
+      send: '发送消息'
     },
     footer: {
-      copyright: '© 2024 Best Apostas. 版權所有。',
-      disclaimer: '請負責任地博彩。18歲以上'
+      copyright: '© 2024 Best Apostas. 版权所有。',
+      disclaimer: '请负责任地博彩。18岁以上'
     }
   }
 };

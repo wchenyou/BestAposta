@@ -78,23 +78,23 @@ export function renderHomePage(lang: Language, playerTypes: any[]): string {
                         <i class="fas fa-shield-alt text-purple-600 text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Seguro e Confiável' : lang === 'zh' ? '安全可靠' : 'Safe & Reliable'}</h3>
-                    <p class="text-gray-600">${lang === 'pt' ? 'Apenas cassinos licenciados e confiáveis' : lang === 'zh' ? '僅推薦持牌可靠的娛樂城' : 'Only licensed and trusted casinos'}</p>
+                    <p class="text-gray-600">${lang === 'pt' ? 'Apenas cassinos licenciados e confiáveis' : lang === 'zh' ? '仅推荐持牌可靠的娱乐城' : 'Only licensed and trusted casinos'}</p>
                 </div>
                 
                 <div class="text-center">
                     <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-gift text-purple-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Melhores Bônus' : lang === 'zh' ? '最佳獎金' : 'Best Bonuses'}</h3>
-                    <p class="text-gray-600">${lang === 'pt' ? 'Ofertas exclusivas para jogadores brasileiros' : lang === 'zh' ? '巴西玩家專屬優惠' : 'Exclusive offers for Brazilian players'}</p>
+                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Melhores Bônus' : lang === 'zh' ? '最佳奖金' : 'Best Bonuses'}</h3>
+                    <p class="text-gray-600">${lang === 'pt' ? 'Ofertas exclusivas para jogadores brasileiros' : lang === 'zh' ? '巴西玩家专属优惠' : 'Exclusive offers for Brazilian players'}</p>
                 </div>
                 
                 <div class="text-center">
                     <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-headset text-purple-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Suporte 24/7' : lang === 'zh' ? '24/7 支援' : '24/7 Support'}</h3>
-                    <p class="text-gray-600">${lang === 'pt' ? 'Ajuda sempre disponível em português' : lang === 'zh' ? '提供葡萄牙語支援服務' : 'Help always available in Portuguese'}</p>
+                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Suporte 24/7' : lang === 'zh' ? '24/7 支持' : '24/7 Support'}</h3>
+                    <p class="text-gray-600">${lang === 'pt' ? 'Ajuda sempre disponível em português' : lang === 'zh' ? '提供葡萄牙语支持服务' : 'Help always available in Portuguese'}</p>
                 </div>
             </div>
         </div>

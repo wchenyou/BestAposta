@@ -4,26 +4,26 @@ INSERT OR IGNORE INTO admin_users (username, email, password_hash) VALUES
 
 -- Insert player types
 INSERT OR IGNORE INTO player_types (name_en, name_pt, name_zh, description_en, description_pt, description_zh, icon, sort_order) VALUES 
-  ('New Players', 'Novos Jogadores', '新玩家', 'Just getting started with online casinos', 'Acabando de começar com cassinos online', '剛接觸線上娛樂城的玩家', 'fa-user-plus', 1),
-  ('Casual Players', 'Jogadores Casuais', '休閒玩家', 'Occasional betting, small stakes', 'Apostas ocasionais, pequenos valores', '偶爾下注、小額參與者', 'fa-dice', 2),
-  ('Frequent Players', 'Jogadores Frequentes', '高頻玩家', 'Regular betting, medium to high deposits', 'Apostas regulares, depósitos médios a altos', '頻繁下注、中高儲值者', 'fa-fire', 3),
-  ('Arbitrage Players', 'Jogadores de Arbitragem', '套利玩家', 'Focus on calculating risk and reward', 'Foco em calcular risco e recompensa', '偏好計算風險與回報差價者', 'fa-calculator', 4),
-  ('VIP Players', 'Jogadores VIP', '老手/VIP', 'Experienced with VIP status', 'Experientes com status VIP', '有累積儲值或VIP資格者', 'fa-crown', 5);
+  ('New Players', 'Novos Jogadores', '新玩家', 'Just getting started with online casinos', 'Acabando de começar com cassinos online', '刚接触在线娱乐城的玩家', 'fa-user-plus', 1),
+  ('Casual Players', 'Jogadores Casuais', '休闲玩家', 'Occasional betting, small stakes', 'Apostas ocasionais, pequenos valores', '偶尔下注、小额参与者', 'fa-dice', 2),
+  ('Frequent Players', 'Jogadores Frequentes', '高频玩家', 'Regular betting, medium to high deposits', 'Apostas regulares, depósitos médios a altos', '频繁下注、中高储值者', 'fa-fire', 3),
+  ('Arbitrage Players', 'Jogadores de Arbitragem', '套利玩家', 'Focus on calculating risk and reward', 'Foco em calcular risco e recompensa', '偏好计算风险与回报差价者', 'fa-calculator', 4),
+  ('VIP Players', 'Jogadores VIP', '老手/VIP', 'Experienced with VIP status', 'Experientes com status VIP', '有累积储值或VIP资格者', 'fa-crown', 5);
 
 -- Insert blog categories
 INSERT OR IGNORE INTO blog_categories (slug, name_en, name_pt, name_zh, sort_order) VALUES 
   ('betting-guides', 'Betting Guides', 'Guias de Apostas', '博彩指南', 1),
-  ('sports-news', 'Sports News', 'Notícias Esportivas', '體育新聞', 2),
-  ('casino-reviews', 'Casino Reviews', 'Análises de Cassinos', '娛樂城評論', 3),
-  ('game-rules', 'Game Rules', 'Regras dos Jogos', '遊戲規則', 4),
-  ('promotions', 'Promotions', 'Promoções', '優惠活動', 5);
+  ('sports-news', 'Sports News', 'Notícias Esportivas', '体育新闻', 2),
+  ('casino-reviews', 'Casino Reviews', 'Análises de Cassinos', '娱乐城评论', 3),
+  ('game-rules', 'Game Rules', 'Regras dos Jogos', '游戏规则', 4),
+  ('promotions', 'Promotions', 'Promoções', '优惠活动', 5);
 
 -- Insert contact settings
 INSERT OR IGNORE INTO contact_settings (email, content_en, content_pt, content_zh) VALUES 
   ('contact@bestapostas.com', 
    'Feel free to contact us for any inquiries about online casinos and betting in Brazil.',
    'Sinta-se à vontade para nos contatar para qualquer dúvida sobre cassinos online e apostas no Brasil.',
-   '如有任何關於巴西線上娛樂城和博彩的問題，歡迎聯繫我們。');
+   '如有任何关于巴西在线娱乐城和博彩的问题，欢迎联系我们。');
 
 -- Insert sample casinos
 INSERT OR IGNORE INTO casinos (slug, name, website_url, affiliate_link, sort_order) VALUES 
