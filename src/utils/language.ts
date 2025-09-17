@@ -62,7 +62,7 @@ export const translations = {
     }
   },
   pt: {
-    siteName: 'Seu Melhor Cassino',
+    siteName: 'Your Best Casino',
     tagline: 'As Melhores Análises de Cassinos Online',
     subtitle: 'Encontre o cassino perfeito para seu estilo de jogo. Comparamos bônus, jogos e segurança para você.',
     nav: {
@@ -115,12 +115,12 @@ export const translations = {
       send: 'Enviar Mensagem'
     },
     footer: {
-      copyright: '© 2025 Seu Melhor Cassino. Todos os direitos reservados.',
+      copyright: '© 2025 Your Best Casino. Todos os direitos reservados.',
       disclaimer: 'Jogue com responsabilidade. 18+'
     }
   },
   zh: {
-    siteName: '您的最佳賭場',
+    siteName: 'Your Best Casino',
     tagline: '最佳線上賭場評論',
     subtitle: '找到適合您遊戲風格的完美賭場。我們為您比較獎金、遊戲和安全性。',
     nav: {
@@ -173,7 +173,7 @@ export const translations = {
       send: '发送消息'
     },
     footer: {
-      copyright: '© 2025 您的最佳賭場. 版权所有。',
+      copyright: '© 2025 Your Best Casino. 版权所有。',
       disclaimer: '请负责任地博彩。18岁以上'
     }
   }

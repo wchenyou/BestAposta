@@ -21,9 +21,9 @@ export function renderCasinosPage(lang: Language, casinos: any[]): string {
               const detail = casino.details ? casino.details[0] : null;
               return `
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition casino-card">
-                    <div class="h-32 bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center p-4">
+                    <div class="h-32 bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center">
                         ${casino.logo_url ? 
-                          `<img src="${casino.logo_url}" alt="${casino.name}" class="max-h-20 max-w-full object-contain">` :
+                          `<img src="${casino.logo_url}" alt="${casino.name}" class="w-full h-full object-contain">` :
                           `<span class="text-purple-600 text-2xl font-bold">${casino.name}</span>`
                         }
                     </div>

@@ -185,7 +185,7 @@ export function renderAdminPage(): string {
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     \${casino.logo_url ? html\`
-                                                        <img src="\${casino.logo_url}" class="h-8 w-12 mr-3 object-contain" />
+                                                        <img src=\${casino.logo_url} alt=\${casino.name} class="h-8 w-12 mr-3 object-contain" />
                                                     \` : ''}
                                                     <span class="font-medium">\${casino.name}</span>
                                                 </div>

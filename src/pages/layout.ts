@@ -103,7 +103,7 @@ export function renderLayout(lang: Language, title: string, content: string): st
                         </div>
                         <div class="flex-1">
                             <h3 class="text-yellow-400 font-bold text-lg mb-2">
-                                ${lang === 'zh' ? '⚠️ 重要提醒' : lang === 'pt' ? '⚠️ Aviso Importante' : '⚠️ Important Notice'}
+                                ${lang === 'zh' ? '重要提醒' : lang === 'pt' ? 'Aviso Importante' : 'Important Notice'}
                             </h3>
                             <p class="text-sm text-gray-200 leading-relaxed">
                                 ${lang === 'zh' ? 
