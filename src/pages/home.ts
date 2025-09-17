@@ -83,18 +83,18 @@ export function renderHomePage(lang: Language, playerTypes: any[]): string {
                 
                 <div class="text-center">
                     <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-gift text-purple-600 text-2xl"></i>
+                        <i class="fas fa-chart-bar text-purple-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Melhores Bônus' : lang === 'zh' ? '最佳奖金' : 'Best Bonuses'}</h3>
-                    <p class="text-gray-600">${lang === 'pt' ? 'Ofertas exclusivas para jogadores brasileiros' : lang === 'zh' ? '巴西玩家专属优惠' : 'Exclusive offers for Brazilian players'}</p>
+                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Análises Detalhadas' : lang === 'zh' ? '详细分析' : 'Detailed Analysis'}</h3>
+                    <p class="text-gray-600">${lang === 'pt' ? 'Comparações completas e imparciais' : lang === 'zh' ? '完整公正的对比分析' : 'Complete and unbiased comparisons'}</p>
                 </div>
                 
                 <div class="text-center">
                     <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-headset text-purple-600 text-2xl"></i>
+                        <i class="fas fa-info-circle text-purple-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Suporte 24/7' : lang === 'zh' ? '24/7 支持' : '24/7 Support'}</h3>
-                    <p class="text-gray-600">${lang === 'pt' ? 'Ajuda sempre disponível em português' : lang === 'zh' ? '提供葡萄牙语支持服务' : 'Help always available in Portuguese'}</p>
+                    <h3 class="text-xl font-bold mb-2">${lang === 'pt' ? 'Informações Atualizadas' : lang === 'zh' ? '最新资讯' : 'Updated Information'}</h3>
+                    <p class="text-gray-600">${lang === 'pt' ? 'Conteúdo sempre atualizado e relevante' : lang === 'zh' ? '持续更新的相关内容' : 'Always updated and relevant content'}</p>
                 </div>
             </div>
         </div>

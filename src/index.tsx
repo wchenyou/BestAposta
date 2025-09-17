@@ -121,22 +121,35 @@ app.get('/casino/:slug', async (c) => {
 app.get('/blog', async (c) => {
   const lang = detectLanguage(c);
   const { env } = c;
+  const categorySlug = c.req.query('category');
   
   try {
     const categories = await env.DB.prepare(`
       SELECT * FROM blog_categories WHERE is_active = 1 ORDER BY sort_order
     `).all();
     
-    const posts = await env.DB.prepare(`
-      SELECT p.*, c.slug as category_slug, c.name_${lang} as category_name
+    let postsQuery = `
+      SELECT p.*, c.slug as category_slug, c.name_en, c.name_pt, c.name_zh
       FROM blog_posts p
       JOIN blog_categories c ON p.category_id = c.id
       WHERE p.is_published = 1
-      ORDER BY p.published_at DESC
-      LIMIT 10
-    `).all();
+    `;
     
-    return c.html(renderBlogPage(lang, categories.results || [], posts.results || []));
+    if (categorySlug) {
+      postsQuery += ` AND c.slug = '${categorySlug}'`;
+    }
+    
+    postsQuery += ` ORDER BY p.published_at DESC LIMIT 20`;
+    
+    const posts = await env.DB.prepare(postsQuery).all();
+    
+    // Add category name for current language
+    const postsWithCategoryName = posts.results?.map(post => ({
+      ...post,
+      category_name: post[`name_${lang}`] || post.name_en
+    })) || [];
+    
+    return c.html(renderBlogPage(lang, categories.results || [], postsWithCategoryName, undefined, categorySlug));
   } catch (error) {
     console.error('Error loading blog page:', error);
     return c.html(renderBlogPage(lang, [], []));

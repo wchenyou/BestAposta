@@ -334,11 +334,36 @@ api.post('/contact', async (c) => {
   const { env } = c;
   const { email, message } = await c.req.json();
   
-  // In a real application, you would send an email or save to database
-  // For now, we'll just log it
-  console.log('Contact form submission:', { email, message });
+  try {
+    // Get IP address and user agent for tracking
+    const ip = c.req.header('CF-Connecting-IP') || c.req.header('X-Forwarded-For') || 'unknown';
+    const userAgent = c.req.header('User-Agent') || 'unknown';
+    
+    // Save to database
+    await env.DB.prepare(
+      'INSERT INTO contact_submissions (email, message, ip_address, user_agent) VALUES (?, ?, ?, ?)'
+    ).bind(email, message, ip, userAgent).run();
+    
+    return c.json({ success: true, message: 'Message sent successfully' });
+  } catch (error) {
+    console.error('Contact form error:', error);
+    return c.json({ error: 'Failed to submit message' }, 500);
+  }
+});
+
+// Get contact submissions (admin only)
+api.get('/admin/contact-submissions', async (c) => {
+  const { env } = c;
   
-  return c.json({ success: true, message: 'Message sent successfully' });
+  try {
+    const submissions = await env.DB.prepare(
+      'SELECT * FROM contact_submissions ORDER BY created_at DESC LIMIT 100'
+    ).all();
+    
+    return c.json(submissions.results);
+  } catch (error) {
+    return c.json({ error: 'Failed to fetch contact submissions' }, 500);
+  }
 });
 
 export default api;

@@ -71,7 +71,7 @@ export function renderCasinosPage(lang: Language, casinos: any[]): string {
                             <a href="${casino.affiliate_link || casino.website_url}" 
                                target="_blank" rel="noopener noreferrer"
                                class="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg text-center font-semibold hover:bg-green-700 transition">
-                                ${lang === 'pt' ? 'Visitar' : lang === 'zh' ? '访问' : 'Visit'}
+                                ${t(lang, 'casino.visitSite')}
                             </a>
                         </div>
                     </div>

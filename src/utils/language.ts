@@ -123,7 +123,7 @@ export const translations = {
     nav: {
       home: '首页',
       casinos: '娱乐城',
-      blog: '博客',
+      blog: '相关文章',
       contact: '联系我们',
       admin: '管理'
     },
@@ -132,7 +132,7 @@ export const translations = {
       subtitle: '发现适合您游戏风格的娱乐城'
     },
     casino: {
-      visitSite: '访问娱乐城',
+      visitSite: '立即游戏',
       bonus: '欢迎奖金',
       minDeposit: '最低存款',
       paymentMethods: '支付方式',
