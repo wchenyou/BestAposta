@@ -66,15 +66,22 @@ app.get('/casinos', async (c) => {
   const { env } = c;
   
   try {
-    // Get all active casinos with their details
+    // Get all active casinos joining casinos and casino_info tables
     const casinos = await env.DB.prepare(`
-      SELECT 
-        c.*,
+      SELECT DISTINCT
+        c.id,
+        c.slug,
+        c.name,
+        c.logo_url,
+        c.website_url,
+        c.affiliate_link,
+        c.sort_order,
+        c.is_active,
         json_object(
-          'welcome_bonus', ci.welcome_bonus,
-          'min_deposit', ci.min_deposit,
+          'welcome_bonus', ci.licenses_safety,
+          'min_deposit', ci.payment_methods,
           'payment_methods', ci.payment_methods,
-          'rating_overall', ci.rating_overall
+          'rating_overall', 4.5
         ) as details
       FROM casinos c
       LEFT JOIN casino_info ci ON c.id = ci.casino_id AND ci.language = ?

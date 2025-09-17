@@ -121,6 +121,13 @@ function renderSinglePost(lang: Language, post: any): string {
   const content = `
     <article class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto">
+            <!-- Back button at top left -->
+            <div class="mb-4">
+                <a href="/blog" class="inline-block bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition">
+                    <i class="fas fa-arrow-left mr-2"></i> ${lang === 'zh' ? '返回文章列表' : lang === 'pt' ? 'Voltar aos Artigos' : 'Back to Articles'}
+                </a>
+            </div>
+            
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 ${post.featured_image ? `
                 <img src="${post.featured_image}" alt="${title}" class="w-full h-64 object-cover">
@@ -132,8 +139,6 @@ function renderSinglePost(lang: Language, post: any): string {
                             ${post.category_name}
                         </span>
                         <span><i class="far fa-calendar mr-1"></i>${new Date(post.published_at).toLocaleDateString(lang)}</span>
-                        ${post.author ? `<span class="ml-4"><i class="far fa-user mr-1"></i>${post.author}</span>` : ''}
-                        <span class="ml-4"><i class="far fa-eye mr-1"></i>${post.views} ${t(lang, 'blog.views')}</span>
                     </div>
                     
                     <h1 class="text-3xl font-bold mb-6">${title}</h1>
@@ -142,12 +147,6 @@ function renderSinglePost(lang: Language, post: any): string {
                         ${content_field}
                     </div>
                 </div>
-            </div>
-            
-            <div class="mt-8 text-center">
-                <a href="/blog" class="inline-block bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
-                    <i class="fas fa-arrow-left mr-2"></i> Back to Blog
-                </a>
             </div>
         </div>
     </article>
