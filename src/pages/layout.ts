@@ -33,10 +33,7 @@ export function renderLayout(lang: Language, title: string, content: string): st
                 <div class="flex justify-between items-center py-4">
                     <a href="/" class="text-lg md:text-2xl font-bold text-purple-600">
                         <i class="fas fa-dice mr-1 md:mr-2"></i>
-                        <!-- Show abbreviated name on mobile -->
-                        <span class="md:hidden">YBC</span>
-                        <!-- Show full name on desktop -->
-                        <span class="hidden md:inline">${t(lang, 'siteName')}</span>
+                        <span>${t(lang, 'siteName')}</span>
                     </a>
                     
                     <div class="hidden md:flex space-x-6">
