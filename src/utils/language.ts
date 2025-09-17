@@ -57,7 +57,7 @@ export const translations = {
       send: 'Send Message'
     },
     footer: {
-      copyright: '© 2024 Best Apostas. All rights reserved.',
+      copyright: '© 2024 Your Best Casino. All rights reserved.',
       disclaimer: 'Please gamble responsibly. 18+'
     }
   },
@@ -115,7 +115,7 @@ export const translations = {
       send: 'Enviar Mensagem'
     },
     footer: {
-      copyright: '© 2024 Best Apostas. Todos os direitos reservados.',
+      copyright: '© 2024 Seu Melhor Cassino. Todos os direitos reservados.',
       disclaimer: 'Jogue com responsabilidade. 18+'
     }
   },
@@ -173,7 +173,7 @@ export const translations = {
       send: '发送消息'
     },
     footer: {
-      copyright: '© 2024 Best Apostas. 版权所有。',
+      copyright: '© 2024 您的最佳賭場. 版权所有。',
       disclaimer: '请负责任地博彩。18岁以上'
     }
   }

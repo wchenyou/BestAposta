@@ -95,11 +95,34 @@ export function renderLayout(lang: Language, title: string, content: string): st
         <!-- Footer -->
         <footer class="bg-gray-800 text-white py-8 mt-12">
             <div class="container mx-auto px-4">
+                <!-- Responsible Gaming Warning -->
+                <div class="bg-yellow-900 bg-opacity-50 border-2 border-yellow-600 rounded-lg p-6 mb-6">
+                    <div class="flex items-start">
+                        <div class="text-yellow-400 mr-3 text-2xl">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-yellow-400 font-bold text-lg mb-2">
+                                ${lang === 'zh' ? '⚠️ 重要提醒' : lang === 'pt' ? '⚠️ Aviso Importante' : '⚠️ Important Notice'}
+                            </h3>
+                            <p class="text-sm text-gray-200 leading-relaxed">
+                                ${lang === 'zh' ? 
+                                  '請理性娛樂，適度參與，未滿18歲請勿賭博。本網站僅提供資訊比較服務，不涉及任何實際博彩活動。請確保您了解當地法律法規，並只在合法的司法管轄區內參與相關活動。博彩可能會上癮，請根據自身經濟能力謹慎參與，如需協助，請聯繫相關專業機構。' :
+                                  lang === 'pt' ?
+                                  'Jogue com responsabilidade e moderação. Menores de 18 anos não devem apostar. Este site oferece apenas serviços de comparação de informações e não está envolvido em nenhuma atividade real de jogos de azar. Certifique-se de compreender as leis e regulamentos locais e participe apenas em jurisdições legais. O jogo pode ser viciante, participe com cautela de acordo com sua capacidade financeira. Se precisar de ajuda, entre em contato com instituições profissionais relevantes.' :
+                                  'Please gamble responsibly and in moderation. Minors under 18 should not gamble. This website only provides information comparison services and is not involved in any actual gambling activities. Please ensure you understand local laws and regulations and only participate in legal jurisdictions. Gambling can be addictive, please participate cautiously according to your financial capacity. If you need help, please contact relevant professional institutions.'
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Copyright and Basic Info -->
                 <div class="text-center">
-                    <p class="mb-2">${t(lang, 'footer.copyright')}</p>
+                    <p class="mb-2">© 2024 ${t(lang, 'siteName')}. ${lang === 'zh' ? '版權所有' : lang === 'pt' ? 'Todos os direitos reservados' : 'All rights reserved'}.</p>
                     <p class="text-sm text-gray-400">
-                        <i class="fas fa-exclamation-triangle mr-2"></i>
-                        ${t(lang, 'footer.disclaimer')}
+                        <i class="fas fa-info-circle mr-2"></i>
+                        ${lang === 'zh' ? '18歲以上 | 請負責任地參與博彩' : lang === 'pt' ? '18+ | Jogue com responsabilidade' : '18+ | Please gamble responsibly'}
                     </p>
                 </div>
             </div>

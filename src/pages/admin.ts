@@ -1509,11 +1509,41 @@ export function renderAdminPage(): string {
                                             onChange=\${e => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/ /g, '-')})} />
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Featured Image URL</label>
-                                        <input type="text" class="w-full px-3 py-2 border rounded"
-                                            placeholder="https://example.com/image.jpg"
-                                            value=\${formData.featured_image}
-                                            onChange=\${e => setFormData({...formData, featured_image: e.target.value})} />
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Featured Image</label>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center space-x-2">
+                                                <input type="text" class="flex-1 px-3 py-2 border rounded"
+                                                    placeholder="https://example.com/image.jpg"
+                                                    value=\${formData.featured_image}
+                                                    onChange=\${e => setFormData({...formData, featured_image: e.target.value})} />
+                                                <label class="px-3 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 cursor-pointer">
+                                                    <i class="fas fa-upload mr-1"></i> Upload
+                                                    <input type="file" 
+                                                        accept="image/*"
+                                                        class="hidden"
+                                                        onChange=\${async (e) => {
+                                                            const file = e.target.files[0];
+                                                            if (file) {
+                                                                // Check file size (max 5MB)
+                                                                if (file.size > 5 * 1024 * 1024) {
+                                                                    alert('File size must be less than 5MB');
+                                                                    return;
+                                                                }
+                                                                
+                                                                // Convert to base64 for storage
+                                                                const reader = new FileReader();
+                                                                reader.onload = (e) => {
+                                                                    setFormData({...formData, featured_image: e.target.result});
+                                                                };
+                                                                reader.readAsDataURL(file);
+                                                                
+                                                                // Show upload info
+                                                                console.log('Uploaded: ' + file.name + ' (' + (file.size / 1024).toFixed(2) + ' KB)');
+                                                            }
+                                                        }} />
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -1542,9 +1572,24 @@ export function renderAdminPage(): string {
                                 </div>
                                 
                                 \${formData.featured_image && html\`
-                                    <div class="border rounded p-2 bg-gray-50">
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Image Preview</label>
-                                        <img src=\${formData.featured_image} alt="Featured" class="max-h-32 rounded" />
+                                    <div class="border rounded p-3 bg-gray-50">
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Image Preview</label>
+                                                <img src=\${formData.featured_image} alt="Featured" class="max-h-40 rounded shadow" />
+                                                <p class="text-xs text-gray-500 mt-2">
+                                                    \${formData.featured_image.startsWith('data:') ? 
+                                                        'Uploaded image (Base64 encoded)' : 
+                                                        formData.featured_image.substring(0, 50) + '...'
+                                                    }
+                                                </p>
+                                            </div>
+                                            <button type="button"
+                                                onClick=\${() => setFormData({...formData, featured_image: ''})}
+                                                class="text-red-500 hover:text-red-700">
+                                                <i class="fas fa-times-circle text-xl"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 \`}
                                 
