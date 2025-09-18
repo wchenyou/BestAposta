@@ -1576,21 +1576,76 @@ export function renderAdminPage(): string {
                                                         onChange=\${async (e) => {
                                                             const file = e.target.files[0];
                                                             if (file) {
-                                                                // Check file size (max 5MB)
-                                                                if (file.size > 5 * 1024 * 1024) {
-                                                                    alert('File size must be less than 5MB');
+                                                                // Check file size
+                                                                if (file.size > 10 * 1024 * 1024) {
+                                                                    alert('File size too large. Maximum 10MB allowed.');
                                                                     return;
                                                                 }
                                                                 
-                                                                // Convert to base64 for storage
-                                                                const reader = new FileReader();
-                                                                reader.onload = (e) => {
-                                                                    setFormData({...formData, featured_image: e.target.result});
-                                                                };
-                                                                reader.readAsDataURL(file);
+                                                                // Show loading state
+                                                                const originalUrl = formData.featured_image;
+                                                                setFormData({...formData, featured_image: 'uploading...'});
                                                                 
-                                                                // Show upload info
-                                                                console.log('Uploaded: ' + file.name + ' (' + (file.size / 1024).toFixed(2) + ' KB)');
+                                                                try {
+                                                                    // Create FormData for upload
+                                                                    const uploadData = new FormData();
+                                                                    uploadData.append('image', file);
+                                                                    
+                                                                    // Try local upload first (stores in your own database)
+                                                                    let res = await apiCall('/admin/upload-local', {
+                                                                        method: 'POST',
+                                                                        body: uploadData,
+                                                                        headers: {} // Let browser set multipart headers
+                                                                    });
+                                                                    
+                                                                    // If local storage fails (file too large), try R2
+                                                                    if (!res.ok && file.size > 2 * 1024 * 1024) {
+                                                                        res = await apiCall('/admin/upload-r2', {
+                                                                            method: 'POST',
+                                                                            body: uploadData,
+                                                                            headers: {}
+                                                                        });
+                                                                    }
+                                                                    
+                                                                    // If R2 not configured, fall back to external service
+                                                                    if (!res.ok) {
+                                                                        res = await apiCall('/admin/upload-image', {
+                                                                            method: 'POST',
+                                                                            body: uploadData,
+                                                                            headers: {}
+                                                                        });
+                                                                    }
+                                                                    
+                                                                    if (res.ok) {
+                                                                        const data = await res.json();
+                                                                        // Use directUrl if available (for base64), otherwise use url
+                                                                        const finalUrl = data.directUrl || data.url;
+                                                                        console.log('Upload successful:', data.message, 'URL:', finalUrl);
+                                                                        
+                                                                        // Force update the form data
+                                                                        setFormData(prev => ({
+                                                                            ...prev,
+                                                                            featured_image: finalUrl
+                                                                        }));
+                                                                        
+                                                                        // Also update the input field directly if needed
+                                                                        const urlInput = document.querySelector('input[type="text"][placeholder="https://example.com/image.jpg"]');
+                                                                        if (urlInput) {
+                                                                            urlInput.value = finalUrl;
+                                                                        }
+                                                                        
+                                                                        alert('Image uploaded successfully!');
+                                                                    } else {
+                                                                        const error = await res.text();
+                                                                        console.error('Upload failed:', error);
+                                                                        alert('Failed to upload image: ' + error);
+                                                                        setFormData({...formData, featured_image: originalUrl});
+                                                                    }
+                                                                } catch (err) {
+                                                                    console.error('Upload error:', err);
+                                                                    alert('Error uploading image: ' + err.message);
+                                                                    setFormData({...formData, featured_image: originalUrl});
+                                                                }
                                                             }
                                                         }} />
                                                 </label>
@@ -1623,24 +1678,59 @@ export function renderAdminPage(): string {
                                     </div>
                                 </div>
                                 
-                                \${formData.featured_image && html\`
+                                \${formData.featured_image && formData.featured_image !== 'uploading...' && html\`
                                     <div class="border rounded p-3 bg-gray-50">
                                         <div class="flex items-start justify-between">
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-2">Image Preview</label>
-                                                <img src=\${formData.featured_image} alt="Featured" class="max-h-40 rounded shadow" />
-                                                <p class="text-xs text-gray-500 mt-2">
-                                                    \${formData.featured_image.startsWith('data:') ? 
-                                                        'Uploaded image (Base64 encoded)' : 
-                                                        formData.featured_image.substring(0, 50) + '...'
-                                                    }
-                                                </p>
+                                            <div class="flex-1">
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                                    <i class="fas fa-image mr-1"></i> Featured Image Preview
+                                                </label>
+                                                <div class="flex items-start gap-4">
+                                                    <img src=\${formData.featured_image} 
+                                                        alt="Featured" 
+                                                        class="max-h-40 max-w-xs rounded shadow object-cover"
+                                                        onError=\${(e) => {
+                                                            e.target.style.display = 'none';
+                                                            e.target.nextElementSibling.style.display = 'flex';
+                                                        }} />
+                                                    <div class="hidden items-center justify-center w-40 h-40 bg-gray-200 rounded">
+                                                        <i class="fas fa-image-slash text-gray-400 text-3xl"></i>
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        <p class="text-xs text-gray-500 break-all">
+                                                            \${formData.featured_image.startsWith('data:') ? 
+                                                                'Image stored in database (Base64)' : 
+                                                                formData.featured_image.startsWith('/api/images/') ? 
+                                                                'Image stored in your database' :
+                                                                formData.featured_image.startsWith('https://r2.') ?
+                                                                'Image stored in R2 bucket' :
+                                                                'External image URL'
+                                                            }
+                                                        </p>
+                                                        <p class="text-xs text-gray-400 mt-1 break-all">
+                                                            \${formData.featured_image.length > 100 ? 
+                                                                formData.featured_image.substring(0, 100) + '...' : 
+                                                                formData.featured_image
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <button type="button"
                                                 onClick=\${() => setFormData({...formData, featured_image: ''})}
-                                                class="text-red-500 hover:text-red-700">
+                                                class="ml-2 text-red-500 hover:text-red-700"
+                                                title="Remove image">
                                                 <i class="fas fa-times-circle text-xl"></i>
                                             </button>
+                                        </div>
+                                    </div>
+                                \`}
+                                
+                                \${formData.featured_image === 'uploading...' && html\`
+                                    <div class="border rounded p-3 bg-blue-50">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-spinner fa-spin text-blue-500 mr-2"></i>
+                                            <span class="text-sm text-blue-600">Uploading image...</span>
                                         </div>
                                     </div>
                                 \`}

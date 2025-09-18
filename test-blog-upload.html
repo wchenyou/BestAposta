@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Blog Image Upload</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">測試部落格文章圖片上傳功能</h1>
+        
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">功能更新說明</h2>
+            <ul class="space-y-2 text-sm">
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <span><strong>相同上傳方式：</strong> 部落格文章的圖片上傳現在使用與賭場 logo 相同的上傳機制</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <span><strong>多重儲存選項：</strong> 優先使用本地 D1 資料庫儲存（最大 2MB），大檔案自動切換到 R2 或外部服務</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <span><strong>上傳狀態顯示：</strong> 上傳時顯示載入狀態，完成後自動更新 URL</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <span><strong>改善的預覽功能：</strong> 顯示圖片來源（資料庫、R2、外部）和完整預覽</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <span><strong>錯誤處理：</strong> 上傳失敗時保留原始 URL 並顯示錯誤訊息</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">測試步驟</h2>
+            <ol class="space-y-3 text-sm">
+                <li>
+                    <div class="flex items-start">
+                        <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">1</span>
+                        <div>
+                            <strong>登入管理後台：</strong>
+                            <a href="https://3000-ihsba951ljfpzhbu01rl9-6532622b.e2b.dev/admin" target="_blank" class="text-blue-600 hover:underline">
+                                https://3000-ihsba951ljfpzhbu01rl9-6532622b.e2b.dev/admin
+                            </a>
+                            <div class="mt-1 text-xs text-gray-600">
+                                使用者名稱：wchenyou<br>
+                                密碼：Aaron12345678
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-start">
+                        <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">2</span>
+                        <div>
+                            <strong>進入部落格管理：</strong> 點擊左側選單的 "Blog" 選項
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-start">
+                        <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">3</span>
+                        <div>
+                            <strong>新增或編輯文章：</strong> 點擊 "Add Post" 或編輯現有文章
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-start">
+                        <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">4</span>
+                        <div>
+                            <strong>測試圖片上傳：</strong>
+                            <ul class="mt-1 ml-4 space-y-1">
+                                <li>• 點擊 "Featured Image" 欄位旁的 "Upload" 按鈕</li>
+                                <li>• 選擇圖片檔案（最大 10MB）</li>
+                                <li>• 觀察上傳過程中的 "Uploading image..." 提示</li>
+                                <li>• 確認圖片上傳成功後 URL 自動更新</li>
+                                <li>• 檢查圖片預覽是否正確顯示</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-start">
+                        <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">5</span>
+                        <div>
+                            <strong>儲存文章：</strong> 點擊 "Save Post" 按鈕儲存變更
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4">技術實現細節</h2>
+            <div class="space-y-4 text-sm">
+                <div>
+                    <h3 class="font-medium mb-2">上傳流程：</h3>
+                    <pre class="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
+1. 檔案選擇 → FormData 封裝
+2. 嘗試本地上傳 (/admin/upload-local)
+   - 儲存到 D1 資料庫 (最大 2MB)
+   - 透過 /api/images/:id 提供服務
+3. 如果檔案太大，嘗試 R2 (/admin/upload-r2)
+   - 需要配置 R2 bucket
+4. 最後使用外部服務 (/admin/upload-image)
+   - 使用 imgbb.com API
+                    </pre>
+                </div>
+                
+                <div>
+                    <h3 class="font-medium mb-2">主要程式碼變更：</h3>
+                    <ul class="space-y-1 ml-4">
+                        <li>• <code class="bg-gray-100 px-1">src/pages/admin.ts</code> - BlogPostForm 元件 (lines 1576-1644)</li>
+                        <li>• 使用與 CasinoForm 相同的 apiCall 函數處理 FormData</li>
+                        <li>• 支援多重上傳端點的 fallback 機制</li>
+                        <li>• 改善的錯誤處理和狀態管理</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 text-center text-sm text-gray-500">
+            <p>更新完成時間：2025-01-18</p>
+            <p>所有圖片上傳功能已統一使用相同的伺服器端儲存機制</p>
+        </div>
+    </div>
+</body>
+</html>
