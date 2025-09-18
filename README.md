@@ -134,7 +134,8 @@ wrangler pages deploy dist --project-name seu-melhor-cassino
 - ✅ 更新導航圖示以匹配新標籤（fa-magic、fa-list）
 - ✅ 將所有「Visit Casino」按鈕改為「Play Now」並使用綠色
 - ✅ 實施基於IP的語言偵測（巴西IP顯示葡萄牙語）
-- ✅ **修復賭場詳細頁面的標頭不一致問題**（使用統一的renderLayout函式）
+- ✅ 修復賭場詳細頁面的標頭不一致問題（使用統一的renderLayout函式）
+- ✅ **手機版部落格分類選擇器置頂固定**（sticky positioning，不會隨頁面滾動消失）
 
 ## 之前更新 (2024-01-17)
 - ✅ 網站從「Best Apostas」更名為「Seu Melhor Cassino」

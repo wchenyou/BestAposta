@@ -40,6 +40,14 @@ export function renderLayout(lang: Language, title: string, content: string): st
           .max-w-7xl {
             max-width: 80rem;
           }
+          /* Hide scrollbar but keep scroll functionality */
+          .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari and Opera */
+          }
         </style>
     </head>
     <body class="bg-gray-50 text-gray-800">

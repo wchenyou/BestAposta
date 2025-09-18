@@ -7,31 +7,39 @@ export function renderBlogPage(lang: Language, categories: any[], posts: any[], 
   }
   
   const content = `
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8">${t(lang, 'nav.blog')}</h1>
-        
-        <!-- Mobile Categories (Top) -->
-        <div class="lg:hidden mb-6">
-            <div class="bg-white rounded-xl shadow-lg p-4">
-                <h3 class="text-lg font-bold mb-3">
-                    <i class="fas fa-folder mr-2 text-purple-600"></i>${t(lang, 'blog.categories')}
+    <!-- Mobile Sticky Categories Header -->
+    <div class="lg:hidden sticky top-[64px] z-30 bg-white border-b border-gray-200 shadow-sm">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-sm font-bold text-gray-700">
+                    <i class="fas fa-folder mr-1 text-purple-600"></i>${t(lang, 'blog.categories')}
                 </h3>
-                <div class="flex flex-wrap gap-2">
-                    <a href="/blog" class="px-3 py-1 ${!currentCategory ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'} rounded-full text-sm hover:bg-purple-700 hover:text-white transition">
-                        ${lang === 'pt' ? 'Todos' : lang === 'zh' ? '全部' : 'All'}
-                    </a>
-                    ${categories.filter(cat => cat.is_visible !== false).map(cat => {
-                      const name = cat[`name_${lang}`] || cat.name_en;
-                      const isActive = currentCategory === cat.slug;
-                      return `
-                        <a href="/blog?category=${cat.slug}" class="px-3 py-1 ${isActive ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'} rounded-full text-sm hover:bg-purple-700 hover:text-white transition">
-                            ${name}
-                        </a>
-                      `;
-                    }).join('')}
+                <div class="text-xs text-gray-500">
+                    <i class="fas fa-chevron-left mr-1"></i>
+                    ${lang === 'pt' ? 'Deslize' : lang === 'zh' ? '滑動' : 'Swipe'}
+                    <i class="fas fa-chevron-right ml-1"></i>
                 </div>
             </div>
+            <div class="flex overflow-x-auto gap-2 pb-1 scrollbar-hide" style="-webkit-overflow-scrolling: touch;">
+                <a href="/blog" class="flex-shrink-0 px-3 py-1.5 ${!currentCategory ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 border border-gray-300'} rounded-full text-sm font-medium transition-colors duration-200">
+                    ${lang === 'pt' ? 'Todos' : lang === 'zh' ? '全部' : 'All'}
+                </a>
+                ${categories.filter(cat => cat.is_visible !== false).map(cat => {
+                  const name = cat[`name_${lang}`] || cat.name_en;
+                  const isActive = currentCategory === cat.slug;
+                  return `
+                    <a href="/blog?category=${cat.slug}" class="flex-shrink-0 px-3 py-1.5 ${isActive ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 border border-gray-300'} rounded-full text-sm font-medium transition-colors duration-200">
+                        ${name}
+                    </a>
+                  `;
+                }).join('')}
+            </div>
         </div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-8">
+        <!-- Add padding-top on mobile to account for sticky category bar -->
+        <h1 class="text-3xl font-bold mb-8 lg:mt-0">${t(lang, 'nav.blog')}</h1>
         
         <div class="grid lg:grid-cols-4 gap-8">
             <!-- Desktop Categories Sidebar (Left) -->
