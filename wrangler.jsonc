@@ -19,5 +19,12 @@
       "id": "a3e5cfe9484949099b861048b0e2fcef",
       "preview_id": "5e294a4a69a449919b25f49a3fdcc21e"
     }
-  ]
+  ],
+  // R2 bucket configuration (optional - uncomment if you have R2 set up)
+  // "r2_buckets": [
+  //   {
+  //     "binding": "R2_BUCKET",
+  //     "bucket_name": "casino-images"
+  //   }
+  // ]
 }

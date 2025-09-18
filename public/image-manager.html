@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖片管理器 - Image Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="max-w-6xl mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-8 text-gray-800">
+            <i class="fas fa-images mr-2"></i>圖片管理器
+        </h1>
+        
+        <!-- Upload Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">上傳新圖片</h2>
+            
+            <div class="space-y-4">
+                <div class="flex items-center space-x-4">
+                    <input type="file" id="fileInput" accept="image/*" multiple
+                           class="block w-full text-sm text-gray-500
+                                  file:mr-4 file:py-2 file:px-4
+                                  file:rounded-md file:border-0
+                                  file:text-sm file:font-semibold
+                                  file:bg-blue-50 file:text-blue-700
+                                  hover:file:bg-blue-100">
+                    
+                    <button id="uploadBtn" 
+                            class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400">
+                        <i class="fas fa-upload mr-2"></i>上傳
+                    </button>
+                </div>
+                
+                <!-- Upload Options -->
+                <div class="flex space-x-4 text-sm">
+                    <label class="flex items-center">
+                        <input type="radio" name="storage" value="local" checked class="mr-2">
+                        <span>本地儲存 (最大 2MB)</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="storage" value="r2" class="mr-2">
+                        <span>R2 儲存 (最大 10MB)</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="storage" value="external" class="mr-2">
+                        <span>外部服務</span>
+                    </label>
+                </div>
+                
+                <!-- Status Messages -->
+                <div id="uploadStatus" class="hidden">
+                    <div class="p-3 rounded-md" id="statusBox">
+                        <p id="statusText"></p>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div id="progressBar" class="hidden">
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div id="progressFill" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Images Grid -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">已上傳的圖片</h2>
+                <button id="refreshBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
+                    <i class="fas fa-sync-alt mr-2"></i>重新載入
+                </button>
+            </div>
+            
+            <div id="imagesGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Images will be loaded here -->
+            </div>
+            
+            <div id="noImages" class="text-center py-12 text-gray-500 hidden">
+                <i class="fas fa-image text-4xl mb-4"></i>
+                <p>尚無圖片</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-auto">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-lg font-semibold">圖片詳情</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <img id="modalImage" class="w-full h-auto rounded-md mb-4">
+                <div class="space-y-2 text-sm">
+                    <p><strong>URL:</strong> <code id="modalUrl" class="bg-gray-100 px-2 py-1 rounded break-all"></code></p>
+                    <p><strong>檔名:</strong> <span id="modalFilename"></span></p>
+                    <p><strong>大小:</strong> <span id="modalSize"></span></p>
+                    <p><strong>上傳時間:</strong> <span id="modalDate"></span></p>
+                </div>
+                <div class="mt-4 flex space-x-2">
+                    <button onclick="copyUrl()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        <i class="fas fa-copy mr-2"></i>複製 URL
+                    </button>
+                    <button onclick="deleteImage()" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                        <i class="fas fa-trash mr-2"></i>刪除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentImageId = null;
+        let currentImageUrl = null;
+        const authToken = localStorage.getItem('adminToken');
+        
+        // Load images on page load
+        loadImages();
+        
+        // Upload button handler
+        document.getElementById('uploadBtn').addEventListener('click', async () => {
+            const files = document.getElementById('fileInput').files;
+            if (files.length === 0) {
+                showStatus('請選擇檔案', 'error');
+                return;
+            }
+            
+            const storageType = document.querySelector('input[name="storage"]:checked').value;
+            let endpoint = '/api/admin/upload-local';
+            
+            if (storageType === 'r2') {
+                endpoint = '/api/admin/upload-r2';
+            } else if (storageType === 'external') {
+                endpoint = '/api/admin/upload-image';
+            }
+            
+            for (let file of files) {
+                await uploadFile(file, endpoint);
+            }
+            
+            loadImages(); // Reload images after upload
+        });
+        
+        async function uploadFile(file, endpoint) {
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            showProgress(true);
+            showStatus(`正在上傳 ${file.name}...`, 'info');
+            
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': authToken ? `Bearer ${authToken}` : ''
+                    },
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showStatus(`✓ ${file.name} 上傳成功！`, 'success');
+                } else {
+                    showStatus(`✗ ${file.name}: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`✗ 上傳失敗: ${error.message}`, 'error');
+            } finally {
+                showProgress(false);
+            }
+        }
+        
+        async function loadImages() {
+            try {
+                const response = await fetch('/api/admin/images', {
+                    headers: {
+                        'Authorization': authToken ? `Bearer ${authToken}` : ''
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.images) {
+                    displayImages(data.images);
+                }
+            } catch (error) {
+                console.error('Failed to load images:', error);
+            }
+        }
+        
+        function displayImages(images) {
+            const grid = document.getElementById('imagesGrid');
+            const noImages = document.getElementById('noImages');
+            
+            if (images.length === 0) {
+                grid.innerHTML = '';
+                noImages.classList.remove('hidden');
+                return;
+            }
+            
+            noImages.classList.add('hidden');
+            grid.innerHTML = images.map(img => `
+                <div class="relative group cursor-pointer" onclick="showImageModal('${img.id}', '${img.url}', '${img.filename}', '${img.size}', '${img.uploaded_at}')">
+                    <img src="${img.url}" alt="${img.filename}" 
+                         class="w-full h-32 object-cover rounded-md border-2 border-gray-200 group-hover:border-blue-400">
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all rounded-md flex items-center justify-center">
+                        <i class="fas fa-search-plus text-white opacity-0 group-hover:opacity-100 text-2xl"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function showImageModal(id, url, filename, size, date) {
+            currentImageId = id;
+            currentImageUrl = url;
+            
+            document.getElementById('modalImage').src = url;
+            document.getElementById('modalUrl').textContent = url;
+            document.getElementById('modalFilename').textContent = filename || 'N/A';
+            document.getElementById('modalSize').textContent = formatBytes(size);
+            document.getElementById('modalDate').textContent = new Date(date).toLocaleString('zh-TW');
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+        
+        function closeModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+        }
+        
+        function copyUrl() {
+            navigator.clipboard.writeText(currentImageUrl).then(() => {
+                showStatus('URL 已複製到剪貼簿', 'success');
+            });
+        }
+        
+        async function deleteImage() {
+            if (!confirm('確定要刪除這張圖片嗎？')) return;
+            
+            try {
+                const response = await fetch(`/api/admin/images/${currentImageId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': authToken ? `Bearer ${authToken}` : ''
+                    }
+                });
+                
+                if (response.ok) {
+                    showStatus('圖片已刪除', 'success');
+                    closeModal();
+                    loadImages();
+                }
+            } catch (error) {
+                showStatus('刪除失敗', 'error');
+            }
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('uploadStatus');
+            const statusBox = document.getElementById('statusBox');
+            const statusText = document.getElementById('statusText');
+            
+            statusDiv.classList.remove('hidden');
+            statusText.textContent = message;
+            
+            statusBox.className = 'p-3 rounded-md';
+            if (type === 'success') {
+                statusBox.classList.add('bg-green-100', 'text-green-800');
+            } else if (type === 'error') {
+                statusBox.classList.add('bg-red-100', 'text-red-800');
+            } else {
+                statusBox.classList.add('bg-blue-100', 'text-blue-800');
+            }
+            
+            setTimeout(() => {
+                statusDiv.classList.add('hidden');
+            }, 5000);
+        }
+        
+        function showProgress(show) {
+            const progressBar = document.getElementById('progressBar');
+            if (show) {
+                progressBar.classList.remove('hidden');
+            } else {
+                progressBar.classList.add('hidden');
+            }
+        }
+        
+        function formatBytes(bytes) {
+            if (!bytes) return 'N/A';
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            if (bytes === 0) return '0 Bytes';
+            const i = Math.floor(Math.log(bytes) / Math.log(1024));
+            return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+        }
+        
+        document.getElementById('refreshBtn').addEventListener('click', loadImages);
+    </script>
+</body>
+</html>

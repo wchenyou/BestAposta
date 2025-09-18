@@ -424,12 +424,30 @@ export function renderAdminPage(): string {
                                                                         const uploadData = new FormData();
                                                                         uploadData.append('image', file);
                                                                         
-                                                                        // Upload to server
-                                                                        const res = await apiCall('/admin/upload-image', {
+                                                                        // Try local upload first (stores in your own database)
+                                                                        let res = await apiCall('/admin/upload-local', {
                                                                             method: 'POST',
                                                                             body: uploadData,
                                                                             headers: {} // Let browser set multipart headers
                                                                         });
+                                                                        
+                                                                        // If local storage fails (file too large), try R2
+                                                                        if (!res.ok && file.size > 2 * 1024 * 1024) {
+                                                                            res = await apiCall('/admin/upload-r2', {
+                                                                                method: 'POST',
+                                                                                body: uploadData,
+                                                                                headers: {}
+                                                                            });
+                                                                        }
+                                                                        
+                                                                        // If R2 not configured, fall back to external service
+                                                                        if (!res.ok) {
+                                                                            res = await apiCall('/admin/upload-image', {
+                                                                                method: 'POST',
+                                                                                body: uploadData,
+                                                                                headers: {}
+                                                                            });
+                                                                        }
                                                                         
                                                                         if (res.ok) {
                                                                             const data = await res.json();
