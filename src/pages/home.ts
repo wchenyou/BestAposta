@@ -4,19 +4,32 @@ import { renderLayout } from './layout';
 export function renderHomePage(lang: Language, playerTypes: any[]): string {
   const content = `
     <!-- Hero Section -->
-    <section class="gradient-bg text-white py-20">
+    <section class="gradient-bg text-white py-12 md:py-20">
         <div class="container mx-auto px-4">
             <div class="text-center">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
                     ${t(lang, 'tagline')}
                 </h1>
-                <p class="text-lg mb-8 max-w-3xl mx-auto">${t(lang, 'subtitle')}</p>
-                <div class="flex justify-center space-x-4">
-                    <a href="#player-types" class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition text-lg">
+                <p class="text-base sm:text-lg mb-6 md:mb-8 max-w-3xl mx-auto px-2">${t(lang, 'subtitle')}</p>
+                <!-- Desktop: Horizontal buttons -->
+                <div class="hidden md:flex justify-center space-x-4">
+                    <a href="#player-types" class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition text-lg inline-block">
                         <i class="fas fa-search mr-2"></i> ${lang === 'pt' ? 'Encontre Seu Cassino Ideal' : lang === 'zh' ? '找到您的理想賭場' : 'Find Your Ideal Casino'}
                     </a>
-                    <a href="/blog" class="bg-purple-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+                    <a href="/blog" class="bg-purple-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition inline-block">
                         <i class="fas fa-book-open mr-2"></i> ${t(lang, 'nav.blog')}
+                    </a>
+                </div>
+                
+                <!-- Mobile: Stacked buttons with proper spacing -->
+                <div class="md:hidden flex flex-col items-center space-y-3">
+                    <a href="#player-types" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition text-base inline-block w-full max-w-xs text-center">
+                        <i class="fas fa-search mr-2"></i> 
+                        <span class="block sm:inline">${lang === 'pt' ? 'Encontre Seu Cassino Ideal' : lang === 'zh' ? '找到您的理想賭場' : 'Find Your Ideal Casino'}</span>
+                    </a>
+                    <a href="/blog" class="bg-purple-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition text-base inline-block w-full max-w-xs text-center">
+                        <i class="fas fa-book-open mr-2"></i> 
+                        <span class="inline">${t(lang, 'nav.blog')}</span>
                     </a>
                 </div>
             </div>
