@@ -19,7 +19,7 @@ export const translations = {
       subtitle: 'Discover casinos tailored to your playing style'
     },
     casino: {
-      visitSite: 'Visit Casino',
+      visitSite: 'Play Now',
       bonus: 'Welcome Bonus',
       minDeposit: 'Min. Deposit',
       paymentMethods: 'Payment Methods',
@@ -77,7 +77,7 @@ export const translations = {
       subtitle: 'Descubra cassinos adequados ao seu estilo de jogo'
     },
     casino: {
-      visitSite: 'Visitar Cassino',
+      visitSite: 'Jogar Agora',
       bonus: 'Bônus de Boas-Vindas',
       minDeposit: 'Depósito Mínimo',
       paymentMethods: 'Métodos de Pagamento',
@@ -135,7 +135,7 @@ export const translations = {
       subtitle: '發現適合您遊戲風格的娛樂城'
     },
     casino: {
-      visitSite: '立即游戏',
+      visitSite: '立即遊戲',
       bonus: '欢迎奖金',
       minDeposit: '最低存款',
       paymentMethods: '支付方式',
