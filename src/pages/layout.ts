@@ -54,13 +54,13 @@ export function renderLayout(lang: Language, title: string, content: string): st
                     
                     <div class="hidden md:flex space-x-6">
                         <a href="/" class="text-gray-600 hover:text-purple-600 transition">
-                            <i class="fas fa-home mr-1"></i> ${t(lang, 'nav.home')}
+                            <i class="fas fa-magic mr-1"></i> ${t(lang, 'nav.home')}
                         </a>
                         <a href="/casinos" class="text-gray-600 hover:text-purple-600 transition">
-                            <i class="fas fa-dice mr-1"></i> ${t(lang, 'nav.casinos')}
+                            <i class="fas fa-list mr-1"></i> ${t(lang, 'nav.casinos')}
                         </a>
                         <a href="/blog" class="text-gray-600 hover:text-purple-600 transition">
-                            <i class="fas fa-blog mr-1"></i> ${t(lang, 'nav.blog')}
+                            <i class="fas fa-newspaper mr-1"></i> ${t(lang, 'nav.blog')}
                         </a>
                         <a href="/contact" class="text-gray-600 hover:text-purple-600 transition">
                             <i class="fas fa-envelope mr-1"></i> ${t(lang, 'nav.contact')}
@@ -99,13 +99,13 @@ export function renderLayout(lang: Language, title: string, content: string): st
                 <!-- Mobile menu -->
                 <div id="mobile-menu" class="hidden md:hidden pb-4">
                     <a href="/" class="block py-2 text-gray-600 hover:text-purple-600">
-                        <i class="fas fa-home mr-2"></i> ${t(lang, 'nav.home')}
+                        <i class="fas fa-magic mr-2"></i> ${t(lang, 'nav.home')}
                     </a>
                     <a href="/casinos" class="block py-2 text-gray-600 hover:text-purple-600">
-                        <i class="fas fa-dice mr-2"></i> ${t(lang, 'nav.casinos')}
+                        <i class="fas fa-list mr-2"></i> ${t(lang, 'nav.casinos')}
                     </a>
                     <a href="/blog" class="block py-2 text-gray-600 hover:text-purple-600">
-                        <i class="fas fa-blog mr-2"></i> ${t(lang, 'nav.blog')}
+                        <i class="fas fa-newspaper mr-2"></i> ${t(lang, 'nav.blog')}
                     </a>
                     <a href="/contact" class="block py-2 text-gray-600 hover:text-purple-600">
                         <i class="fas fa-envelope mr-2"></i> ${t(lang, 'nav.contact')}
