@@ -74,7 +74,9 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
             <div class="flex flex-col md:flex-row items-center justify-between">
               <div class="flex items-center mb-4 md:mb-0">
                 ${casino.logo_url ? `
-                  <img src="${casino.logo_url}" alt="${casino.name}" class="h-20 w-32 object-contain mr-6">
+                  <div class="h-20 w-32 mr-6 flex items-center justify-center bg-gradient-to-br from-gray-50 to-white rounded-lg">
+                    <img src="${casino.logo_url}" alt="${casino.name}" class="w-full h-full object-contain">
+                  </div>
                 ` : ''}
                 <div>
                   <h1 class="text-3xl font-bold text-gray-900">${casino.name}</h1>
