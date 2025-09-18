@@ -23,13 +23,11 @@ export function renderHomePage(lang: Language, playerTypes: any[]): string {
                 
                 <!-- Mobile: Stacked buttons with proper spacing -->
                 <div class="md:hidden flex flex-col items-center space-y-3">
-                    <a href="#player-types" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition text-base inline-block w-full max-w-xs text-center">
-                        <i class="fas fa-search mr-2"></i> 
-                        <span class="block sm:inline">${lang === 'pt' ? 'Encontre Seu Cassino Ideal' : lang === 'zh' ? '找到您的理想賭場' : 'Find Your Ideal Casino'}</span>
+                    <a href="#player-types" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition text-base inline-flex items-center justify-center w-full max-w-xs">
+                        <i class="fas fa-search mr-2"></i>${lang === 'pt' ? 'Encontre Seu Cassino Ideal' : lang === 'zh' ? '找到您的理想賭場' : 'Find Your Ideal Casino'}
                     </a>
-                    <a href="/blog" class="bg-purple-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition text-base inline-block w-full max-w-xs text-center">
-                        <i class="fas fa-book-open mr-2"></i> 
-                        <span class="inline">${t(lang, 'nav.blog')}</span>
+                    <a href="/blog" class="bg-purple-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition text-base inline-flex items-center justify-center w-full max-w-xs">
+                        <i class="fas fa-book-open mr-2"></i>${t(lang, 'nav.blog')}
                     </a>
                 </div>
             </div>
