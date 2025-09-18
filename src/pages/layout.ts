@@ -15,14 +15,30 @@ export function renderLayout(lang: Language, title: string, content: string): st
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           }
           .casino-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
           }
           .casino-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+          }
+          .casino-card img {
+            filter: grayscale(0);
+            transition: filter 0.3s ease;
+          }
+          .casino-card:hover img {
+            filter: grayscale(0) brightness(1.05);
           }
           .rating-bar {
             background: linear-gradient(90deg, #10b981 0%, #10b981 var(--rating), #e5e7eb var(--rating));
+          }
+          .line-clamp-1 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+          }
+          .max-w-7xl {
+            max-width: 80rem;
           }
         </style>
     </head>

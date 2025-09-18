@@ -24,41 +24,45 @@ export function renderHomePage(lang: Language, playerTypes: any[]): string {
     </section>
     
     <!-- Player Types Section -->
-    <section id="player-types" class="py-16">
-        <div class="container mx-auto px-4">
+    <section id="player-types" class="py-16 bg-gradient-to-b from-white to-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold mb-4">${t(lang, 'playerTypes.title')}</h2>
                 <p class="text-gray-600">${t(lang, 'playerTypes.subtitle')}</p>
             </div>
             
-            <div class="space-y-8">
+            <div class="space-y-6">
                 ${playerTypes.map(playerType => {
                   const name = playerType[`name_${lang}`] || playerType.name_en;
                   const description = playerType[`description_${lang}`] || playerType.description_en;
                   const casinos = playerType.casinos_json ? JSON.parse(`[${playerType.casinos_json}]`) : [];
                   
                   return `
-                    <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-5">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-                                <i class="fas ${playerType.icon || 'fa-user'} text-purple-600 text-xl"></i>
+                            <div class="w-10 h-10 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center mr-3 shadow-sm">
+                                <i class="fas ${playerType.icon || 'fa-user'} text-purple-700 text-lg"></i>
                             </div>
-                            <div>
-                                <h3 class="text-xl font-bold">${name}</h3>
-                                ${description ? `<p class="text-gray-600">${description}</p>` : ''}
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-gray-800">${name}</h3>
+                                ${description ? `<p class="text-sm text-gray-600 line-clamp-1">${description}</p>` : ''}
                             </div>
                         </div>
                         
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                             ${casinos.map(casino => `
-                                <a href="/casino/${casino.slug}" class="casino-card bg-white border-2 border-gray-200 rounded-lg overflow-hidden text-center hover:border-purple-500 hover:shadow-lg transition">
-                                    <div class="h-16 flex items-center justify-center bg-gray-50">
+                                <a href="/casino/${casino.slug}" class="casino-card bg-white border-2 border-gray-200 rounded-lg overflow-hidden text-center hover:border-purple-500 hover:shadow-lg transition group">
+                                    <div class="h-20 p-3 flex items-center justify-center bg-gradient-to-b from-gray-50 to-white group-hover:from-purple-50 group-hover:to-white transition-colors">
                                         ${casino.logo_url ? 
-                                          `<img src="${casino.logo_url}" alt="${casino.name}" class="w-full h-full object-contain">` :
-                                          `<span class="text-lg font-bold text-purple-600">${casino.name}</span>`
+                                          `<img src="${casino.logo_url}" 
+                                               alt="${casino.name}" 
+                                               class="max-w-full max-h-full object-contain"
+                                               style="width: auto; height: auto;"
+                                               onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-sm font-bold text-purple-600\\'>${casino.name}</span>'">` :
+                                          `<span class="text-sm font-bold text-purple-600">${casino.name}</span>`
                                         }
                                     </div>
-                                    <p class="text-sm font-semibold text-gray-700 p-2">${casino.name}</p>
+                                    <p class="text-xs font-semibold text-gray-700 px-2 py-1.5 bg-gray-50 group-hover:bg-purple-50 transition-colors truncate">${casino.name}</p>
                                 </a>
                             `).join('')}
                         </div>
