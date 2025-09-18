@@ -10,7 +10,7 @@ export function renderCasinosPage(lang: Language, casinos: any[]): string {
                 ${lang === 'pt' ? 
                   'Explore nossa lista completa de cassinos online confiáveis, com análises detalhadas e comparações' : 
                   lang === 'zh' ? 
-                  '探索我們完整的可靠線上娛樂城列表，包含詳細分析和比較' : 
+                  '探索我们完整的可靠在线赌场列表，包含详细分析和比较' : 
                   'Explore our complete list of trusted online casinos with detailed reviews and comparisons'}
             </p>
         </div>
