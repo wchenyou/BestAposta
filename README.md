@@ -149,5 +149,64 @@ wrangler pages deploy dist --project-name seu-melhor-cassino
 - ✅ 將部落格標題改為「相關文章」
 - ✅ 調整部落格列表圖片為16:9比例
 
+## 📚 完整技術文件
+詳細的技術文件、部署教學、檔案結構說明請參閱：
+👉 **[README_COMPLETE.md](./README_COMPLETE.md)**
+
+### 文件包含內容：
+- Docker 本機部署完整教學
+- Render 雲端部署完整教學  
+- Cloudflare Pages 部署教學
+- 所有技術框架詳細說明
+- 專案檔案結構與每個檔案說明
+- API 端點文件
+- 資料庫架構說明
+- 開發指南與最佳實踐
+- 維護與更新指南
+- 疑難排解方案
+
+## 快速部署指南
+
+### 🐳 Docker 部署（本機）
+```bash
+# 克隆專案
+git clone https://github.com/wchenyou/BestAposta.git
+cd BestAposta
+
+# 使用 Docker Compose 啟動
+docker-compose up -d --build
+
+# 訪問 http://localhost:3000
+```
+
+### 🚀 Render 部署（雲端）
+1. Fork 此專案到您的 GitHub
+2. 在 Render Dashboard 創建新 Web Service
+3. 連接 GitHub 儲存庫
+4. Render 會自動讀取 `render.yaml` 配置
+5. 點擊部署
+
+### ☁️ Cloudflare Pages 部署
+```bash
+# 安裝 Wrangler
+npm install -g wrangler
+
+# 登入並部署
+wrangler login
+npm run build
+npx wrangler pages deploy dist --project-name your-project-name
+```
+
+## 技術棧概覽
+- **後端**: Hono Framework + Cloudflare Workers
+- **資料庫**: Cloudflare D1 (SQLite)
+- **前端**: Tailwind CSS + Vanilla JS + HTM (管理介面)
+- **部署**: Docker / Render / Cloudflare Pages
+- **建構**: Vite + TypeScript
+- **程序管理**: PM2
+
 ## 聯絡方式
 如有問題或需要支援，請通過管理後台聯絡設定進行聯繫。
+
+---
+📖 **完整文件請查看 [README_COMPLETE.md](./README_COMPLETE.md)**

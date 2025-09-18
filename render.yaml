@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: best-apostas-webapp
+    runtime: node
+    region: oregon # 或選擇其他區域：singapore, frankfurt, ohio
+    plan: free # 或選擇 starter, standard, pro
+    buildCommand: npm install && npm run build
+    startCommand: npx wrangler pages dev dist --ip 0.0.0.0 --port $PORT --compatibility-date 2025-09-17
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        generateValue: true
+      # 如需使用 Cloudflare API，請在 Render Dashboard 中設定以下環境變數
+      # - key: CLOUDFLARE_API_TOKEN
+      #   sync: false # 在 Render Dashboard 中手動設定
+    healthCheckPath: /
+    autoDeploy: true # 自動從 GitHub 部署
