@@ -180,7 +180,7 @@ export const translations = {
 };
 
 export function detectLanguage(c: Context): Language {
-  // Check for language cookie
+  // 1. Check for language cookie (user preference)
   const cookies = c.req.header('Cookie');
   if (cookies) {
     const langMatch = cookies.match(/lang=([^;]+)/);
@@ -189,35 +189,51 @@ export function detectLanguage(c: Context): Language {
     }
   }
 
-  // Check subdomain for Chinese
-  const host = c.req.header('host') || '';
-  if (host.startsWith('cn.') || host.startsWith('zh.')) {
-    return 'zh';
-  }
-
-  // Check query parameter
+  // 2. Check query parameter (direct link)
   const url = new URL(c.req.url);
   const langParam = url.searchParams.get('lang');
   if (langParam && ['en', 'pt', 'zh'].includes(langParam)) {
     return langParam as Language;
   }
 
-  // Check Accept-Language header for Portuguese (Brazil)
-  const acceptLang = c.req.header('Accept-Language') || '';
-  if (acceptLang.includes('pt-BR') || acceptLang.includes('pt')) {
-    // Check if IP is from Brazil (simplified check - in production use geo-ip service)
-    const cfCountry = c.req.header('CF-IPCountry');
-    if (cfCountry === 'BR') {
-      return 'pt';
-    }
+  // 3. Check subdomain for Chinese
+  const host = c.req.header('host') || '';
+  if (host.startsWith('cn.') || host.startsWith('zh.')) {
+    return 'zh';
   }
 
-  // Check for Chinese in Accept-Language
+  // 4. Check IP Country (Cloudflare provides CF-IPCountry header)
+  const cfCountry = c.req.header('CF-IPCountry');
+  
+  // Brazil IP -> Portuguese
+  if (cfCountry === 'BR') {
+    return 'pt';
+  }
+  
+  // China, Hong Kong, Macau, Taiwan -> Chinese
+  if (cfCountry === 'CN' || cfCountry === 'HK' || cfCountry === 'MO' || cfCountry === 'TW') {
+    return 'zh';
+  }
+  
+  // Portugal -> Portuguese
+  if (cfCountry === 'PT') {
+    return 'pt';
+  }
+
+  // 5. Check Accept-Language header as fallback
+  const acceptLang = c.req.header('Accept-Language') || '';
+  
+  // Check for Portuguese speakers
+  if (acceptLang.includes('pt-BR') || acceptLang.includes('pt')) {
+    return 'pt';
+  }
+  
+  // Check for Chinese speakers
   if (acceptLang.includes('zh')) {
     return 'zh';
   }
 
-  // Default to English
+  // 6. Default to English for all other countries
   return 'en';
 }
 
