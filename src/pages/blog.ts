@@ -16,7 +16,7 @@ export function renderBlogPage(lang: Language, categories: any[], posts: any[], 
                 </h3>
                 <div class="text-xs text-gray-500">
                     <i class="fas fa-chevron-left mr-1"></i>
-                    ${lang === 'pt' ? 'Deslize' : lang === 'zh' ? '滑動' : 'Swipe'}
+                    ${lang === 'pt' ? 'Deslize' : lang === 'zh' ? '滑动' : 'Swipe'}
                     <i class="fas fa-chevron-right ml-1"></i>
                 </div>
             </div>

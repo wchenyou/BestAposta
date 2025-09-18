@@ -121,21 +121,21 @@ export const translations = {
   },
   zh: {
     siteName: 'Your Best Casino',
-    tagline: '最佳線上賭場評論',
-    subtitle: '找到適合您遊戲風格的完美賭場。我們為您比較獎金、遊戲和安全性。',
+    tagline: '最佳在线赌场评论',
+    subtitle: '找到适合您游戏风格的完美赌场。我们为您比较奖金、游戏和安全性。',
     nav: {
-      home: '客製化推薦',
-      casinos: '所有娛樂城',
-      blog: '相關文章',
-      contact: '聯繫我們',
+      home: '个性化推荐',
+      casinos: '所有赌场',
+      blog: '相关文章',
+      contact: '联系我们',
       admin: '管理'
     },
     playerTypes: {
-      title: '客製化推薦',
-      subtitle: '發現適合您遊戲風格的娛樂城'
+      title: '个性化推荐',
+      subtitle: '发现适合您游戏风格的赌场'
     },
     casino: {
-      visitSite: '立即遊戲',
+      visitSite: '立即游戏',
       bonus: '欢迎奖金',
       minDeposit: '最低存款',
       paymentMethods: '支付方式',

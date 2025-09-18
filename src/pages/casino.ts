@@ -62,7 +62,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
             <!-- Basic Information Table -->
             <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
               <h2 class="text-2xl font-bold mb-6 text-gray-900">
-                ${lang === 'zh' ? '基本資訊' : lang === 'pt' ? 'Informações Básicas' : 'Basic Information'}
+                ${lang === 'zh' ? '基本信息' : lang === 'pt' ? 'Informações Básicas' : 'Basic Information'}
               </h2>
               <div class="overflow-x-auto">
                 <table class="w-full">
@@ -86,7 +86,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
                     ${info.licenses_safety ? `
                       <tr>
                         <td class="py-3 px-4 font-semibold text-gray-700 bg-gray-50">
-                          ${lang === 'zh' ? '國際牌照與網站安全' : lang === 'pt' ? 'Licenças e Segurança' : 'Licenses & Safety'}
+                          ${lang === 'zh' ? '国际牌照与网站安全' : lang === 'pt' ? 'Licenças e Segurança' : 'Licenses & Safety'}
                         </td>
                         <td class="py-3 px-4 text-gray-900">${info.licenses_safety}</td>
                       </tr>
@@ -94,7 +94,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
                     ${info.operating_countries ? `
                       <tr>
                         <td class="py-3 px-4 font-semibold text-gray-700 bg-gray-50">
-                          ${lang === 'zh' ? '經營國家' : lang === 'pt' ? 'Países de Operação' : 'Operating Countries'}
+                          ${lang === 'zh' ? '经营国家' : lang === 'pt' ? 'Países de Operação' : 'Operating Countries'}
                         </td>
                         <td class="py-3 px-4 text-gray-900">${info.operating_countries}</td>
                       </tr>
@@ -102,7 +102,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
                     ${info.supported_currencies ? `
                       <tr>
                         <td class="py-3 px-4 font-semibold text-gray-700 bg-gray-50">
-                          ${lang === 'zh' ? '支援幣別' : lang === 'pt' ? 'Moedas Suportadas' : 'Supported Currencies'}
+                          ${lang === 'zh' ? '支持币种' : lang === 'pt' ? 'Moedas Suportadas' : 'Supported Currencies'}
                         </td>
                         <td class="py-3 px-4 text-gray-900">${info.supported_currencies}</td>
                       </tr>
@@ -110,7 +110,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
                     ${info.supported_languages ? `
                       <tr>
                         <td class="py-3 px-4 font-semibold text-gray-700 bg-gray-50">
-                          ${lang === 'zh' ? '支援語系' : lang === 'pt' ? 'Idiomas Suportados' : 'Supported Languages'}
+                          ${lang === 'zh' ? '支持语言' : lang === 'pt' ? 'Idiomas Suportados' : 'Supported Languages'}
                         </td>
                         <td class="py-3 px-4 text-gray-900">${info.supported_languages}</td>
                       </tr>
@@ -118,7 +118,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
                     ${info.game_types ? `
                       <tr>
                         <td class="py-3 px-4 font-semibold text-gray-700 bg-gray-50">
-                          ${lang === 'zh' ? '遊戲類型' : lang === 'pt' ? 'Tipos de Jogos' : 'Game Types'}
+                          ${lang === 'zh' ? '游戏类型' : lang === 'pt' ? 'Tipos de Jogos' : 'Game Types'}
                         </td>
                         <td class="py-3 px-4 text-gray-900">${info.game_types}</td>
                       </tr>
@@ -158,7 +158,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
                 <div>
                   <h3 class="text-xl font-bold mb-4 text-gray-900">
                     <i class="fas fa-question-circle text-purple-600 mr-2"></i>
-                    ${lang === 'zh' ? '為何選擇這間娛樂城？' : lang === 'pt' ? 'Por que escolher este cassino?' : 'Why choose this casino?'}
+                    ${lang === 'zh' ? '为何选择这家赌场？' : lang === 'pt' ? 'Por que escolher este cassino?' : 'Why choose this casino?'}
                   </h3>
                   <div class="text-gray-700 whitespace-pre-line">${info.why_choose}</div>
                 </div>
@@ -168,7 +168,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
                 <div>
                   <h3 class="text-xl font-bold mb-4 text-gray-900">
                     <i class="fas fa-star text-purple-600 mr-2"></i>
-                    ${lang === 'zh' ? '娛樂城特色' : lang === 'pt' ? 'Características do Cassino' : 'Casino Features'}
+                    ${lang === 'zh' ? '赌场特色' : lang === 'pt' ? 'Características do Cassino' : 'Casino Features'}
                   </h3>
                   <div class="text-gray-700 whitespace-pre-line">${info.casino_features}</div>
                 </div>
@@ -178,7 +178,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
                 <div>
                   <h3 class="text-xl font-bold mb-4 text-gray-900">
                     <i class="fas fa-shield-alt text-purple-600 mr-2"></i>
-                    ${lang === 'zh' ? '國際牌照與網站安全' : lang === 'pt' ? 'Licenças e Segurança do Site' : 'Licenses & Website Security'}
+                    ${lang === 'zh' ? '国际牌照与网站安全' : lang === 'pt' ? 'Licenças e Segurança do Site' : 'Licenses & Website Security'}
                   </h3>
                   <div class="text-gray-700 whitespace-pre-line">${info.licenses_safety_detail}</div>
                 </div>
@@ -198,7 +198,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
                 <div>
                   <h3 class="text-xl font-bold mb-4 text-gray-900">
                     <i class="fas fa-gamepad text-purple-600 mr-2"></i>
-                    ${lang === 'zh' ? '遊戲種類' : lang === 'pt' ? 'Variedade de Jogos' : 'Game Variety'}
+                    ${lang === 'zh' ? '游戏种类' : lang === 'pt' ? 'Variedade de Jogos' : 'Game Variety'}
                   </h3>
                   <div class="text-gray-700 whitespace-pre-line">${info.game_variety_detail}</div>
                 </div>
@@ -208,7 +208,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
                 <div>
                   <h3 class="text-xl font-bold mb-4 text-gray-900">
                     <i class="fas fa-futbol text-purple-600 mr-2"></i>
-                    ${lang === 'zh' ? '體育投注功能' : lang === 'pt' ? 'Recursos de Apostas Esportivas' : 'Sports Betting Features'}
+                    ${lang === 'zh' ? '体育投注功能' : lang === 'pt' ? 'Recursos de Apostas Esportivas' : 'Sports Betting Features'}
                   </h3>
                   <div class="text-gray-700 whitespace-pre-line">${info.sports_betting_features}</div>
                 </div>

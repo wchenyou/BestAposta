@@ -142,7 +142,7 @@ export function renderLayout(lang: Language, title: string, content: string): st
                             </h3>
                             <p class="text-sm text-gray-200 leading-relaxed">
                                 ${lang === 'zh' ? 
-                                  '請理性娛樂，適度參與，未滿18歲請勿賭博。本網站僅提供資訊比較服務，不涉及任何實際博彩活動。請確保您了解當地法律法規，並只在合法的司法管轄區內參與相關活動。博彩可能會上癮，請根據自身經濟能力謹慎參與，如需協助，請聯繫相關專業機構。' :
+                                  '请理性娱乐，适度参与，未满18岁请勿赌博。本网站仅提供信息比较服务，不涉及任何实际博彩活动。请确保您了解当地法律法规，并只在合法的司法管辖区内参与相关活动。博彩可能会上瘾，请根据自身经济能力谨慎参与，如需协助，请联系相关专业机构。' :
                                   lang === 'pt' ?
                                   'Jogue com responsabilidade e moderação. Menores de 18 anos não devem apostar. Este site oferece apenas serviços de comparação de informações e não está envolvido em nenhuma atividade real de jogos de azar. Certifique-se de compreender as leis e regulamentos locais e participe apenas em jurisdições legais. O jogo pode ser viciante, participe com cautela de acordo com sua capacidade financeira. Se precisar de ajuda, entre em contato com instituições profissionais relevantes.' :
                                   'Please gamble responsibly and in moderation. Minors under 18 should not gamble. This website only provides information comparison services and is not involved in any actual gambling activities. Please ensure you understand local laws and regulations and only participate in legal jurisdictions. Gambling can be addictive, please participate cautiously according to your financial capacity. If you need help, please contact relevant professional institutions.'
@@ -154,7 +154,7 @@ export function renderLayout(lang: Language, title: string, content: string): st
                 
                 <!-- Copyright and Basic Info -->
                 <div class="text-center">
-                    <p class="mb-2">© 2025 ${t(lang, 'siteName')}. ${lang === 'zh' ? '版權所有' : lang === 'pt' ? 'Todos os direitos reservados' : 'All rights reserved'}.</p>
+                    <p class="mb-2">© 2025 ${t(lang, 'siteName')}. ${lang === 'zh' ? '版权所有' : lang === 'pt' ? 'Todos os direitos reservados' : 'All rights reserved'}.</p>
                 </div>
             </div>
         </footer>
