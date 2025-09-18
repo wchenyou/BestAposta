@@ -172,8 +172,13 @@ export function renderAdminPage(): string {
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     \${casino.logo_url ? html\`
-                                                        <img src=\${casino.logo_url} alt=\${casino.name} class="h-8 w-12 mr-3 object-contain" />
-                                                    \` : ''}
+                                                        <img src="\${casino.logo_url}" alt="\${casino.name}" class="h-10 w-16 mr-3 object-contain border rounded" 
+                                                             onerror="this.style.display='none'" />
+                                                    \` : html\`
+                                                        <div class="h-10 w-16 mr-3 bg-gray-200 rounded flex items-center justify-center">
+                                                            <i class="fas fa-image text-gray-400"></i>
+                                                        </div>
+                                                    \`}
                                                     <span class="font-medium">\${casino.name}</span>
                                                 </div>
                                             </td>
@@ -411,9 +416,12 @@ export function renderAdminPage(): string {
                                                 </div>
                                                 \${formData.logo_url ? html\`
                                                     <div class="flex items-center space-x-3 p-2 border rounded bg-gray-50">
-                                                        <img src="\${formData.logo_url}" class="h-12 w-12 object-contain" alt="Logo preview" />
+                                                        <img src="\${formData.logo_url}" 
+                                                             class="h-12 w-16 object-contain border rounded" 
+                                                             alt="Logo preview"
+                                                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'48\' viewBox=\'0 0 64 48\'%3E%3Crect width=\'64\' height=\'48\' fill=\'%23e5e7eb\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'12\'%3ENo Image%3C/text%3E%3C/svg%3E'" />
                                                         <div class="flex-1">
-                                                            <p class="text-xs text-gray-600">Logo Preview</p>
+                                                            <p class="text-xs text-gray-600 font-medium">Logo Preview</p>
                                                             <p class="text-xs text-gray-500 truncate">\${formData.logo_url.substring(0, 50)}...</p>
                                                         </div>
                                                         <button type="button"

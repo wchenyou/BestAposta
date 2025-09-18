@@ -1,0 +1,22 @@
+-- Update casino logos with placeholder images that will work
+-- Using placeholder.com service which generates images dynamically
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/FF6B6B/ffffff?text=Betwinner' WHERE slug = 'betwinner';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/4ECDC4/ffffff?text=22BET' WHERE slug = '22bet';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/45B7D1/ffffff?text=BETANO' WHERE slug = 'betano';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/FFA07A/ffffff?text=Melbet' WHERE slug = 'melbet';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/98D8C8/ffffff?text=1xBet' WHERE slug = '1xbet';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/FFD700/333333?text=Betsson' WHERE slug = 'betsson';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/2ECC71/ffffff?text=Bet365' WHERE slug = 'bet365';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/3498DB/ffffff?text=Pinnacle' WHERE slug = 'pinnacle';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/E74C3C/ffffff?text=LeonBet' WHERE slug = 'leonbet';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/9B59B6/ffffff?text=Rivalo' WHERE slug = 'rivalo';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/1ABC9C/ffffff?text=Novibet' WHERE slug = 'novibet';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/F39C12/ffffff?text=KTO' WHERE slug = 'kto';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/27AE60/ffffff?text=BetNacional' WHERE slug = 'betnacional';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/8E44AD/ffffff?text=Brazino777' WHERE slug = 'brazino777';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/C0392B/ffffff?text=PixBet' WHERE slug = 'pixbet';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/16A085/ffffff?text=VaideBet' WHERE slug = 'vaidebet';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/2980B9/ffffff?text=SuperBet' WHERE slug = 'superbet';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/D35400/ffffff?text=F12Bet' WHERE slug = 'f12bet';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/7F8C8D/ffffff?text=MrJack' WHERE slug = 'mrjackbet';
+UPDATE casinos SET logo_url = 'https://via.placeholder.com/200x100/34495E/ffffff?text=GaleraBet' WHERE slug = 'galerabet';

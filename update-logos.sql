@@ -1,0 +1,21 @@
+-- Update casino logos with better quality images
+UPDATE casinos SET logo_url = 'https://cdn.worldvectorlogo.com/logos/betwinner-3.svg' WHERE slug = 'betwinner';
+UPDATE casinos SET logo_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/22bet-logo.svg/320px-22bet-logo.svg.png' WHERE slug = '22bet';
+UPDATE casinos SET logo_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Betano-logo.png/320px-Betano-logo.png' WHERE slug = 'betano';
+UPDATE casinos SET logo_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Melbet_Logo.svg/320px-Melbet_Logo.svg.png' WHERE slug = 'melbet';
+UPDATE casinos SET logo_url = 'https://static.wikia.nocookie.net/esports-livepedia/images/9/94/1xBet_2023_allmode.png' WHERE slug = '1xbet';
+UPDATE casinos SET logo_url = 'https://www.betsson.com/globalassets/logo.png' WHERE slug = 'betsson';
+UPDATE casinos SET logo_url = 'https://logos-world.net/wp-content/uploads/2023/03/Bet365-Logo.png' WHERE slug = 'bet365';
+UPDATE casinos SET logo_url = 'https://logos-world.net/wp-content/uploads/2022/12/Pinnacle-Logo.png' WHERE slug = 'pinnacle';
+UPDATE casinos SET logo_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Leon_Bets_logo.svg/320px-Leon_Bets_logo.svg.png' WHERE slug = 'leonbet';
+UPDATE casinos SET logo_url = 'https://seeklogo.com/images/R/rivalo-logo-AAF088FDDA-seeklogo.com.png' WHERE slug = 'rivalo';
+UPDATE casinos SET logo_url = 'https://www.novibet.com/img/novibet-logo.svg' WHERE slug = 'novibet';
+UPDATE casinos SET logo_url = 'https://logosandtypes.com/wp-content/uploads/2024/01/KTO.svg' WHERE slug = 'kto';
+UPDATE casinos SET logo_url = 'https://www.betnacional.com/img/logo-betnacional.png' WHERE slug = 'betnacional';
+UPDATE casinos SET logo_url = 'https://www.brazino777.com/images/logo.png' WHERE slug = 'brazino777';
+UPDATE casinos SET logo_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Pixbet_logo.svg/320px-Pixbet_logo.svg.png' WHERE slug = 'pixbet';
+UPDATE casinos SET logo_url = 'https://cdn.sportingtech.com/casinos/logos/vaidebet.png' WHERE slug = 'vaidebet';
+UPDATE casinos SET logo_url = 'https://superbet.com/img/superbet-logo.svg' WHERE slug = 'superbet';
+UPDATE casinos SET logo_url = 'https://www.f12bet.com/logo.png' WHERE slug = 'f12bet';
+UPDATE casinos SET logo_url = 'https://www.mrjack.bet/assets/images/logo.png' WHERE slug = 'mrjackbet';
+UPDATE casinos SET logo_url = 'https://www.galera.bet/assets/images/logo-galerab.svg' WHERE slug = 'galerabet';
