@@ -1,8 +1,9 @@
 import { Context } from 'hono';
 import { Bindings } from '../types';
-import { translations as t } from '../utils/language';
+import { Language, t } from '../utils/language';
+import { renderLayout } from './layout';
 
-export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug: string, lang: 'en' | 'pt' | 'zh') {
+export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug: string, lang: Language) {
   const { env } = c;
   
   try {
@@ -12,20 +13,13 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
     ).bind(slug).first();
     
     if (!casino) {
-      return c.html(`
-        <html>
-        <head>
-          <title>Casino Not Found - Best Apostas</title>
-          <script src="https://cdn.tailwindcss.com"></script>
-        </head>
-        <body class="bg-gray-100">
-          <div class="max-w-4xl mx-auto p-8">
-            <h1 class="text-2xl font-bold mb-4">Casino não encontrado / Casino not found / 赌场未找到</h1>
-            <a href="/" class="text-purple-600 hover:underline">← ${t[lang].nav.home}</a>
-          </div>
-        </body>
-        </html>
-      `);
+      const content = `
+        <div class="max-w-4xl mx-auto p-8">
+          <h1 class="text-2xl font-bold mb-4">Casino não encontrado / Casino not found / 赌场未找到</h1>
+          <a href="/" class="text-purple-600 hover:underline">← ${t(lang, 'nav.home')}</a>
+        </div>
+      `;
+      return c.html(renderLayout(lang, 'Casino Not Found', content));
     }
     
     // Get casino detailed info in the requested language
@@ -38,36 +32,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
       'SELECT * FROM casino_info WHERE casino_id = ? AND language = "en"'
     ).bind(casino.id).first();
     
-    return c.html(`
-      <!DOCTYPE html>
-      <html lang="${lang}">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${casino.name} - ${t[lang].siteName}</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-      </head>
-      <body class="bg-gray-100">
-        <!-- Navigation -->
-        <nav class="bg-white shadow-lg">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-              <div class="flex items-center">
-                <a href="/" class="flex items-center">
-                  <span class="text-2xl font-bold text-purple-600">${t[lang].siteName}</span>
-                </a>
-                <div class="hidden md:flex ml-10 space-x-8">
-                  <a href="/" class="text-gray-700 hover:text-purple-600">${t[lang].nav.home}</a>
-                  <a href="/casinos" class="text-gray-700 hover:text-purple-600">${t[lang].nav.casinos}</a>
-                  <a href="/blog" class="text-gray-700 hover:text-purple-600">${t[lang].nav.blog}</a>
-                  <a href="/contact" class="text-gray-700 hover:text-purple-600">${t[lang].nav.contact}</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </nav>
-        
+    const content = `
         <div class="max-w-7xl mx-auto px-4 py-8">
           <!-- Casino Header -->
           <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
@@ -88,7 +53,7 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
               <a href="${casino.affiliate_link}" target="_blank" rel="noopener" 
                 class="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-3 rounded-lg font-bold hover:from-green-700 hover:to-green-800 transition">
                 <i class="fas fa-play-circle mr-2"></i>
-                ${t[lang].casino.visitSite}
+                ${t(lang, 'casino.visitSite')}
               </a>
             </div>
           </div>
@@ -297,33 +262,19 @@ export async function renderCasinoPage(c: Context<{ Bindings: Bindings }>, slug:
           </div>
         </div>
         
-        <!-- Language Selector Script -->
-        <script>
-          function changeLanguage(lang) {
-            document.cookie = 'lang=' + lang + '; Max-Age=' + (60 * 60 * 24 * 365) + '; Path=/; SameSite=Lax';
-            window.location.reload();
-          }
-        </script>
-      </body>
-      </html>
-    `);
+    `;
+    
+    return c.html(renderLayout(lang, casino.name, content));
     
   } catch (error) {
     console.error('Error loading casino:', error);
-    return c.html(`
-      <html>
-      <head>
-        <title>Error - Best Apostas</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-      </head>
-      <body class="bg-gray-100">
-        <div class="max-w-4xl mx-auto p-8">
-          <h1 class="text-2xl font-bold mb-4 text-red-600">Error loading casino</h1>
-          <p>We apologize for the inconvenience. Please try again later.</p>
-          <a href="/" class="text-purple-600 hover:underline">← ${t[lang].nav.home}</a>
-        </div>
-      </body>
-      </html>
-    `);
+    const content = `
+      <div class="max-w-4xl mx-auto p-8">
+        <h1 class="text-2xl font-bold mb-4 text-red-600">Error loading casino</h1>
+        <p>We apologize for the inconvenience. Please try again later.</p>
+        <a href="/" class="text-purple-600 hover:underline">← ${t(lang, 'nav.home')}</a>
+      </div>
+    `;
+    return c.html(renderLayout(lang, 'Error', content));
   }
 }
