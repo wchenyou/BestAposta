@@ -56,7 +56,10 @@ localUploadApi.post('/admin/upload-local', async (c) => {
       `).bind(imageId, file.name, file.type, file.size, dataUrl).run();
       
       // Return the URL to access the image
-      const imageUrl = `/api/images/${imageId}`;
+      // Use full URL for better compatibility
+      const host = c.req.header('host') || 'localhost:3000';
+      const protocol = c.req.header('x-forwarded-proto') || 'http';
+      const imageUrl = `${protocol}://${host}/api/images/${imageId}`;
       
       return c.json({ 
         success: true, 

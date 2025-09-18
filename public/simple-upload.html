@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡單圖片上傳測試</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">圖片上傳測試</h1>
+        
+        <div class="bg-white p-6 rounded shadow">
+            <div class="space-y-4">
+                <!-- File input -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">選擇圖片</label>
+                    <input type="file" id="fileInput" accept="image/*" class="border rounded px-3 py-2 w-full">
+                </div>
+                
+                <!-- Upload button -->
+                <button id="uploadBtn" onclick="uploadImage()" 
+                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    上傳圖片
+                </button>
+                
+                <!-- Status -->
+                <div id="status" class="text-sm"></div>
+                
+                <!-- Result -->
+                <div id="result" class="hidden space-y-2">
+                    <h3 class="font-bold">上傳成功！</h3>
+                    <p class="text-sm">URL: <input id="urlInput" class="border rounded px-2 py-1 w-full" readonly></p>
+                    <button onclick="copyUrl()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                        複製 URL
+                    </button>
+                    <div class="mt-4">
+                        <p class="text-sm font-medium mb-2">預覽:</p>
+                        <img id="preview" class="max-w-full h-auto border rounded">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 bg-blue-50 p-4 rounded">
+            <h2 class="font-bold mb-2">測試說明：</h2>
+            <ol class="text-sm space-y-1">
+                <li>1. 選擇一張圖片（建議小於 2MB）</li>
+                <li>2. 點擊「上傳圖片」</li>
+                <li>3. 系統會自動上傳並返回 URL</li>
+                <li>4. 複製 URL 可以在管理後台使用</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        async function uploadImage() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('請選擇一張圖片');
+                return;
+            }
+            
+            // Check file size
+            if (file.size > 10 * 1024 * 1024) {
+                alert('檔案太大，最大支援 10MB');
+                return;
+            }
+            
+            const status = document.getElementById('status');
+            status.textContent = '上傳中...';
+            status.className = 'text-sm text-blue-600';
+            
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+                
+                // Try local upload first
+                let response = await fetch('/api/admin/upload-local', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                // If local fails and file > 2MB, try R2
+                if (!response.ok && file.size > 2 * 1024 * 1024) {
+                    console.log('Local storage failed, trying R2...');
+                    response = await fetch('/api/admin/upload-r2', {
+                        method: 'POST',
+                        body: formData
+                    });
+                }
+                
+                // If both fail, try external service
+                if (!response.ok) {
+                    console.log('R2 failed, trying external service...');
+                    response = await fetch('/api/admin/upload-image', {
+                        method: 'POST',
+                        body: formData
+                    });
+                }
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Upload response:', data);
+                    
+                    // Use directUrl for base64 or url for hosted images
+                    const imageUrl = data.directUrl || data.url;
+                    
+                    status.textContent = '上傳成功！';
+                    status.className = 'text-sm text-green-600';
+                    
+                    // Show result
+                    document.getElementById('result').classList.remove('hidden');
+                    document.getElementById('urlInput').value = imageUrl;
+                    document.getElementById('preview').src = imageUrl;
+                } else {
+                    const error = await response.json();
+                    status.textContent = '上傳失敗: ' + (error.error || '未知錯誤');
+                    status.className = 'text-sm text-red-600';
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                status.textContent = '上傳錯誤: ' + error.message;
+                status.className = 'text-sm text-red-600';
+            }
+        }
+        
+        function copyUrl() {
+            const urlInput = document.getElementById('urlInput');
+            urlInput.select();
+            document.execCommand('copy');
+            alert('URL 已複製！您可以在管理後台的 Logo URL 欄位貼上使用。');
+        }
+        
+        // Preview on file select
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // Just preview locally first
+                    console.log('File selected:', file.name, 'Size:', file.size);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

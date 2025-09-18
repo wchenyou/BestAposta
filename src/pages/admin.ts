@@ -451,11 +451,32 @@ export function renderAdminPage(): string {
                                                                         
                                                                         if (res.ok) {
                                                                             const data = await res.json();
-                                                                            setFormData({...formData, logo_url: data.url});
-                                                                            console.log('Upload successful:', data.message);
+                                                                            // Use directUrl if available (for base64), otherwise use url
+                                                                            const finalUrl = data.directUrl || data.url;
+                                                                            console.log('Upload successful:', data.message, 'URL:', finalUrl);
+                                                                            
+                                                                            // Force update the form data
+                                                                            setFormData(prev => ({
+                                                                                ...prev,
+                                                                                logo_url: finalUrl
+                                                                            }));
+                                                                            
+                                                                            // Also update the input field directly if needed
+                                                                            const urlInput = document.querySelector('input[type="url"][placeholder="https://example.com/logo.png"]');
+                                                                            if (urlInput) {
+                                                                                urlInput.value = finalUrl;
+                                                                            }
+                                                                            
+                                                                            alert('圖片上傳成功！URL: ' + finalUrl.substring(0, 50) + '...');
                                                                         } else {
-                                                                            const error = await res.json();
-                                                                            alert('Upload failed: ' + (error.error || 'Unknown error'));
+                                                                            let errorMsg = 'Upload failed';
+                                                                            try {
+                                                                                const error = await res.json();
+                                                                                errorMsg = error.error || 'Unknown error';
+                                                                            } catch (e) {
+                                                                                errorMsg = 'Network error';
+                                                                            }
+                                                                            alert('Upload failed: ' + errorMsg);
                                                                             setFormData({...formData, logo_url: originalUrl});
                                                                         }
                                                                     } catch (err) {
