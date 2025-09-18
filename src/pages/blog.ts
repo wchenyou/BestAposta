@@ -74,8 +74,11 @@ export function renderBlogPage(lang: Language, categories: any[], posts: any[], 
                         <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col md:flex-row">
                             ${post.featured_image ? `
                             <div class="md:w-1/3">
-                                <div class="relative pb-[56.25%] md:pb-0 md:h-full">
-                                    <img src="${post.featured_image}" alt="${title}" class="absolute inset-0 w-full h-full object-cover md:relative">
+                                <div class="relative pb-[75%] md:pb-0 md:h-full">
+                                    <img src="${post.featured_image}" 
+                                         alt="${title}" 
+                                         class="absolute inset-0 w-full h-full object-cover md:relative"
+                                         onerror="this.style.display='none'; this.parentElement.style.display='none';">
                                 </div>
                             </div>
                             ` : ''}
@@ -130,7 +133,19 @@ function renderSinglePost(lang: Language, post: any): string {
             
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 ${post.featured_image ? `
-                <img src="${post.featured_image}" alt="${title}" class="w-full h-64 object-cover">
+                <!-- Featured image with better aspect ratio -->
+                <div class="relative w-full bg-gray-100">
+                    <!-- 16:9 aspect ratio on mobile, 2:1 on desktop for better viewing -->
+                    <div class="relative pb-[56.25%] md:pb-[50%] lg:pb-[45%]">
+                        <img src="${post.featured_image}" 
+                             alt="${title}" 
+                             class="absolute inset-0 w-full h-full object-cover"
+                             loading="lazy"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'absolute inset-0 flex items-center justify-center bg-gray-200\\'><i class=\\'fas fa-image-slash text-gray-400 text-4xl\\'></i></div>';">
+                        <!-- Gradient overlay for better text readability if needed -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                </div>
                 ` : ''}
                 
                 <div class="p-8">
