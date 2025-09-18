@@ -9,13 +9,13 @@ export const translations = {
     subtitle: 'Find the perfect casino for your playing style. We compare bonuses, games, and security for you.',
     nav: {
       home: 'Home',
-      casinos: 'Casinos',
+      casinos: 'All Casinos',
       blog: 'Related Articles',
       contact: 'Contact',
       admin: 'Admin'
     },
     playerTypes: {
-      title: 'Find the Right Casino for You',
+      title: 'Personalized Recommendations',
       subtitle: 'Discover casinos tailored to your playing style'
     },
     casino: {
@@ -67,13 +67,13 @@ export const translations = {
     subtitle: 'Encontre o cassino perfeito para seu estilo de jogo. Comparamos bônus, jogos e segurança para você.',
     nav: {
       home: 'Início',
-      casinos: 'Cassinos',
+      casinos: 'Todos os Cassinos',
       blog: 'Artigos Relacionados',
       contact: 'Contato',
       admin: 'Admin'
     },
     playerTypes: {
-      title: 'Encontre o Cassino Certo para Você',
+      title: 'Recomendações Personalizadas',
       subtitle: 'Descubra cassinos adequados ao seu estilo de jogo'
     },
     casino: {
@@ -124,15 +124,15 @@ export const translations = {
     tagline: '最佳線上賭場評論',
     subtitle: '找到適合您遊戲風格的完美賭場。我們為您比較獎金、遊戲和安全性。',
     nav: {
-      home: '首页',
-      casinos: '娱乐城',
-      blog: '相关文章',
-      contact: '联系我们',
+      home: '首頁',
+      casinos: '所有娛樂城',
+      blog: '相關文章',
+      contact: '聯繫我們',
       admin: '管理'
     },
     playerTypes: {
-      title: '找到适合您的娱乐城',
-      subtitle: '发现适合您游戏风格的娱乐城'
+      title: '客製化推薦',
+      subtitle: '發現適合您遊戲風格的娛樂城'
     },
     casino: {
       visitSite: '立即游戏',

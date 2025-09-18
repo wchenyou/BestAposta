@@ -8,10 +8,10 @@ export function renderCasinosPage(lang: Language, casinos: any[]): string {
             <h1 class="text-4xl font-bold mb-4">${t(lang, 'nav.casinos')}</h1>
             <p class="text-lg text-gray-600">
                 ${lang === 'pt' ? 
-                  'Explore nossa lista completa de cassinos online confiáveis para jogadores brasileiros' : 
+                  'Explore nossa lista completa de cassinos online confiáveis, com análises detalhadas e comparações' : 
                   lang === 'zh' ? 
-                  '探索我们为巴西玩家精选的可靠在线娱乐城完整列表' : 
-                  'Explore our complete list of trusted online casinos for Brazilian players'}
+                  '探索我們完整的可靠線上娛樂城列表，包含詳細分析和比較' : 
+                  'Explore our complete list of trusted online casinos with detailed reviews and comparisons'}
             </p>
         </div>
         
