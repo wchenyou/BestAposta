@@ -8,7 +8,7 @@ export const translations = {
     tagline: 'The Best Online Casino Reviews',
     subtitle: 'Find the perfect casino for your playing style. We compare bonuses, games, and security for you.',
     nav: {
-      home: 'Home',
+      home: 'Personalized Recommendations',
       casinos: 'All Casinos',
       blog: 'Related Articles',
       contact: 'Contact',
@@ -66,7 +66,7 @@ export const translations = {
     tagline: 'As Melhores Análises de Cassinos Online',
     subtitle: 'Encontre o cassino perfeito para seu estilo de jogo. Comparamos bônus, jogos e segurança para você.',
     nav: {
-      home: 'Início',
+      home: 'Recomendações Personalizadas',
       casinos: 'Todos os Cassinos',
       blog: 'Artigos Relacionados',
       contact: 'Contato',
@@ -124,7 +124,7 @@ export const translations = {
     tagline: '最佳線上賭場評論',
     subtitle: '找到適合您遊戲風格的完美賭場。我們為您比較獎金、遊戲和安全性。',
     nav: {
-      home: '首頁',
+      home: '客製化推薦',
       casinos: '所有娛樂城',
       blog: '相關文章',
       contact: '聯繫我們',
