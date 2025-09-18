@@ -14,6 +14,7 @@ import { renderFullAdminPage } from './pages/admin-full';
 import { renderWorkingAdminPage } from './pages/admin-working';
 import apiRoutes from './routes/api';
 import casinoApi from './routes/casino-api';
+import uploadApi from './routes/upload-api';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -26,6 +27,7 @@ app.use('/static/*', serveStatic({ root: './public' }));
 // API routes
 app.route('/api', apiRoutes);
 app.route('/api', casinoApi);
+app.route('/api', uploadApi);
 
 // Home page
 app.get('/', async (c) => {

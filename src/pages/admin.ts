@@ -21,14 +21,24 @@ export function renderAdminPage(): string {
             
             // API helper
             async function apiCall(url, options = {}) {
+                // Don't set Content-Type for FormData - browser will set it with boundary
+                const isFormData = options.body instanceof FormData;
+                
+                const headers = {
+                    'Authorization': authToken ? 'Bearer ' + authToken : '',
+                    ...options.headers
+                };
+                
+                // Only add Content-Type if not FormData and not already set
+                if (!isFormData && !options.headers?.['Content-Type']) {
+                    headers['Content-Type'] = 'application/json';
+                }
+                
                 const res = await fetch(API_BASE + url, {
                     ...options,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': authToken ? 'Bearer ' + authToken : '',
-                        ...options.headers
-                    }
+                    headers
                 });
+                
                 if (!res.ok && res.status === 401) {
                     localStorage.removeItem('adminToken');
                     window.location.reload();
@@ -399,17 +409,42 @@ export function renderAdminPage(): string {
                                                             onChange=\${async (e) => {
                                                                 const file = e.target.files[0];
                                                                 if (file) {
-                                                                    // Convert to base64 for preview
-                                                                    const reader = new FileReader();
-                                                                    reader.onload = (e) => {
-                                                                        // For now, we'll use the base64 data URL
-                                                                        // In production, you'd upload to a CDN/storage service
-                                                                        setFormData({...formData, logo_url: e.target.result});
-                                                                    };
-                                                                    reader.readAsDataURL(file);
+                                                                    // Check file size
+                                                                    if (file.size > 10 * 1024 * 1024) {
+                                                                        alert('File size too large. Maximum 10MB allowed.');
+                                                                        return;
+                                                                    }
                                                                     
-                                                                    // Show file info
-                                                                    alert('File selected: ' + file.name + '\\nSize: ' + (file.size / 1024).toFixed(2) + ' KB\\n\\nNote: In production, this would upload to a CDN.');
+                                                                    // Show loading state
+                                                                    const originalUrl = formData.logo_url;
+                                                                    setFormData({...formData, logo_url: 'uploading...'});
+                                                                    
+                                                                    try {
+                                                                        // Create FormData for upload
+                                                                        const uploadData = new FormData();
+                                                                        uploadData.append('image', file);
+                                                                        
+                                                                        // Upload to server
+                                                                        const res = await apiCall('/admin/upload-image', {
+                                                                            method: 'POST',
+                                                                            body: uploadData,
+                                                                            headers: {} // Let browser set multipart headers
+                                                                        });
+                                                                        
+                                                                        if (res.ok) {
+                                                                            const data = await res.json();
+                                                                            setFormData({...formData, logo_url: data.url});
+                                                                            console.log('Upload successful:', data.message);
+                                                                        } else {
+                                                                            const error = await res.json();
+                                                                            alert('Upload failed: ' + (error.error || 'Unknown error'));
+                                                                            setFormData({...formData, logo_url: originalUrl});
+                                                                        }
+                                                                    } catch (err) {
+                                                                        console.error('Upload error:', err);
+                                                                        alert('Failed to upload image. Please try again.');
+                                                                        setFormData({...formData, logo_url: originalUrl});
+                                                                    }
                                                                 }
                                                             }} />
                                                     </label>
