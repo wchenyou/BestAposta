@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "best-apostas",
+  "name": "best-casino-webapp",
   "compatibility_date": "2025-09-17",
   "pages_build_output_dir": "./dist",
   "compatibility_flags": [
@@ -10,13 +10,14 @@
     {
       "binding": "DB",
       "database_name": "best-apostas-production",
-      "database_id": "pending-creation"
+      "database_id": "local-database"
     }
   ],
   "kv_namespaces": [
     {
       "binding": "KV",
-      "id": "pending-creation"
+      "id": "a3e5cfe9484949099b861048b0e2fcef",
+      "preview_id": "5e294a4a69a449919b25f49a3fdcc21e"
     }
   ]
 }

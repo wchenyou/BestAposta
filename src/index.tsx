@@ -9,7 +9,11 @@ import { renderCasinosPage } from './pages/casinos';
 import { renderBlogPage } from './pages/blog';
 import { renderContactPage } from './pages/contact';
 import { renderAdminPage } from './pages/admin';
+import { renderAdminReactPage } from './pages/admin-react';
+import { renderFullAdminPage } from './pages/admin-full';
+import { renderWorkingAdminPage } from './pages/admin-working';
 import apiRoutes from './routes/api';
+import casinoApi from './routes/casino-api';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -21,6 +25,7 @@ app.use('/static/*', serveStatic({ root: './public' }));
 
 // API routes
 app.route('/api', apiRoutes);
+app.route('/api', casinoApi);
 
 // Home page
 app.get('/', async (c) => {
@@ -197,7 +202,7 @@ app.get('/contact', async (c) => {
   }
 });
 
-// Admin panel
+// Admin panel - serve original version (before credential change)
 app.get('/admin', async (c) => {
   return c.html(renderAdminPage());
 });

@@ -1,7 +1,6 @@
 import { Hono } from 'hono';
 import { Bindings } from '../types';
 import { hashPassword, verifyPassword, generateToken, isAuthenticated } from '../utils/auth';
-import casinoApi from './casino-api';
 
 const api = new Hono<{ Bindings: Bindings }>();
 
@@ -565,8 +564,5 @@ api.post('/admin/player-types/:id/casinos', async (c) => {
     return c.json({ error: 'Failed to update player type casinos' }, 500);
   }
 });
-
-// Mount casino API routes
-api.route('', casinoApi);
 
 export default api;
